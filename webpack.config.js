@@ -1,12 +1,15 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+
+
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    entry: __dirname + "/src/main.js",//已多次提及的唯一入口文件
+    entry: __dirname + "/src/index.js",//已多次提及的唯一入口文件
     output: {
         path: __dirname + "/build",//打包后的文件存放的地方
         filename: "index_bundle.js"//打包后输出文件的文件名
     },
-    devtool: 'eval-source-map',
+    devtool: process.env.NODE_ENV === 'production' ? 'eval-source-map' : 'eval',
     devServer: {
         static: {
             directory: __dirname + "/static",
@@ -22,15 +25,15 @@ module.exports = {
             // watch: {} (options for the `watch` option you can find https://github.com/paulmillr/chokidar)
             watch: true,
         },
+        port: 3000
     },
     module: {
         rules: [
             {
                 test: /(\.jsx|\.js)$/,
-                use: {
-                    loader: "babel-loader"
-                },
-                exclude: /node_modules/
+                loader: "babel-loader",
+                exclude: /node_modules/,
+                options: { presets: ['@babel/env','@babel/preset-react'] },
             },
             {
                 test: /\.css$/,
@@ -52,6 +55,21 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: __dirname + "/index.html"//new 一个这个插件的实例，并传入相关的参数
-        })
-    ]
+        }),
+        // Work around for Buffer is undefined:
+        // https://github.com/webpack/changelog-v5/issues/10
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
+    ],
+    resolve: {
+        extensions: [ '.ts', '.js' ],
+        fallback: {
+            "stream": require.resolve("stream-browserify"),
+            "buffer": require.resolve("buffer")
+        }
+    },
 };
