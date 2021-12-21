@@ -1,9 +1,7 @@
 import React from "react";
-import { Slider } from 'antd';
+import { Slider, Select } from 'antd';
 import {Replayer} from "../Replayer.js";
 import ReplayerAPI from "../api/ReplayerAPI.js";
-import { Image } from 'antd';
-import { Select } from 'antd';
 import axios from "../axiosConfig.js"
 
 const { Option } = Select;
@@ -12,6 +10,7 @@ const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 
 const Frame = () => {
     const frameRef = React.useRef(null);
+    const frameParentRef = React.useRef(null);
     const [trace, setTrace] = React.useState();
     const [actorCodeList, setActorCodeList] = React.useState([])
     const [sliderSize, setSliderSize] = React.useState(0);
@@ -71,7 +70,7 @@ const Frame = () => {
         setEnd(range[1])
     }
     React.useEffect( () => {
-        const renderer = new ScratchRender(frameRef.current);
+        const renderer = new ScratchRender(frameRef.current, );
         renderer.setLayerGroupOrdering(['group1']);
         ReplayerAPI.getTrace(selectedProject).then((response) => {
             setTrace(response.data);
@@ -84,6 +83,13 @@ const Frame = () => {
             // renderer.isTouchingColor(drawableID2, [255,255,255]);
             requestAnimationFrame(drawStep);
         };
+        // size somehow gets multiplied by 4 on mac retina displays
+        // const rect = frameParentRef.current.getBoundingClientRect();
+        // console.log("rect: ", rect);
+        const width = frameParentRef.current.offsetWidth / window.devicePixelRatio;
+        const height = width * 0.75;
+        console.log("width, height: ", width, height);
+        renderer.resize(width, height);
         drawStep();
     }, [selectedProject])
 
@@ -96,7 +102,7 @@ const Frame = () => {
         replayer.current.loadFrame(parseInt(val));
     }
     return (
-        <>
+        <div style={{width: "100%"}} ref={frameParentRef}>
             <Select defaultValue={projectSelections[0]} style={{ width: 120 }} onChange={handleChangeSelect}>
                 {projectSelections.map((name, idx) => (
                     <Option value={idx}>{name}</Option>
@@ -104,12 +110,12 @@ const Frame = () => {
             </Select>
 
             <canvas
-                ref={frameRef} width="100px" height="100px"
+                ref={frameRef} width="400px"
             >
             </canvas>
             <Slider min={0} max={sliderSize}  defaultValue={0} onChange={loadFrame} />
             <Slider min={0} max={sliderSize} range defaultValue={[0, 10]}  onChange={handleChange}/>
-        </>
+        </div>
     )
 }
 export default Frame;
