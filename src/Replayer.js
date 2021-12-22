@@ -1,4 +1,4 @@
-import axios from "./axiosConfig"
+import axios from "./axiosConfig.js"
 
 export class Replayer {
     constructor(renderer, selectedProject, trace) {

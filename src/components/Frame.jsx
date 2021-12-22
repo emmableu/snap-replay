@@ -1,10 +1,14 @@
 import React from "react";
-import { Slider, Select } from 'antd';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
 import {Replayer} from "../Replayer.js";
 import ReplayerAPI from "../api/ReplayerAPI.js";
 import axios from "../axiosConfig.js"
-
-const { Option } = Select;
 const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 
 
@@ -16,7 +20,8 @@ const Frame = () => {
     const [sliderSize, setSliderSize] = React.useState(0);
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(0);
-    const replayer = React.useRef(null)
+    const replayer = React.useRef(null);
+    const minDistance = 1;
     // const projectSelections = [ "keymove", "bullet_wrap"]
     const projectSelections = [
         "02-Boat Race",
@@ -68,13 +73,28 @@ const Frame = () => {
     const handleChange = (range) => {
         setStart(range[0])
         setEnd(range[1])
+    };
+
+    function valuetext(value) {
+        return `frame ${value}`;
     }
+
     React.useEffect( () => {
         const renderer = new ScratchRender(frameRef.current, );
         renderer.setLayerGroupOrdering(['group1']);
         ReplayerAPI.getTrace(selectedProject).then((response) => {
             setTrace(response.data);
             setSliderSize(response.data.length)
+            setMarks([
+                {
+                    value: 0,
+                    label: '0',
+                },
+                {
+                    value: response.data.length - 1,
+                    label: (response.data.length - 1).toString(),
+                },
+            ]);
             replayer.current = new Replayer(renderer, selectedProject, response.data);
         });
         const drawStep = function () {
@@ -93,28 +113,89 @@ const Frame = () => {
         drawStep();
     }, [selectedProject])
 
-    function handleChangeSelect(value) {
-        setSelectedProject(projectSelections[value])
+    function handleChangeSelect(event) {
+        setSelectedProject(event.target.value)
     }
 
 
-    const loadFrame = (val) => {
-        replayer.current.loadFrame(parseInt(val));
+    const [timeRange, setTimeRange] = React.useState([20, 37]);
+
+    const [marks, setMarks] = React.useState([{value:0, label: '0'}]);
+
+
+    const handleChangeTimeSlider = (event, newValue, activeThumb) => {
+        if (!Array.isArray(newValue)) {
+            return;
+        }
+
+        if (newValue[1] - newValue[0] < minDistance) {
+            if (activeThumb === 0) {
+                const clamped = Math.min(newValue[0], 100 - minDistance);
+                setTimeRange([clamped, clamped + minDistance]);
+            } else {
+                const clamped = Math.max(newValue[1], minDistance);
+                setTimeRange([clamped - minDistance, clamped]);
+            }
+        } else {
+            setTimeRange(newValue);
+        }
+    };
+
+
+    const loadFrame = (event) => {
+        replayer.current.loadFrame(parseInt(event.target.value));
     }
     return (
         <div style={{width: "100%"}} ref={frameParentRef}>
-            <Select defaultValue={projectSelections[0]} style={{ width: 120 }} onChange={handleChangeSelect}>
-                {projectSelections.map((name, idx) => (
-                    <Option value={idx}>{name}</Option>
-                ))}
-            </Select>
+
+            {/*<Select defaultValue={projectSelections[0]} style={{ width: 120 }} onChange={handleChangeSelect}>*/}
+            {/*    {projectSelections.map((name, idx) => (*/}
+            {/*        <Option value={idx}>{name}</Option>*/}
+            {/*    ))}*/}
+            {/*</Select>*/}
+
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-helper-label">Project name</InputLabel>
+                <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={selectedProject}
+                    label="Age"
+                    onChange={handleChangeSelect}
+                >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                        {projectSelections.map((name) => (
+                            <MenuItem value={name}>{name}</MenuItem>
+                        ))}
+                </Select>
+                <FormHelperText>Select an example project</FormHelperText>
+            </FormControl>
 
             <canvas
                 ref={frameRef} width="400px"
             >
             </canvas>
-            <Slider min={0} max={sliderSize}  defaultValue={0} onChange={loadFrame} />
-            <Slider min={0} max={sliderSize} range defaultValue={[0, 10]}  onChange={handleChange}/>
+            <Slider
+                aria-label="Temperature"
+                defaultValue={0}
+                valueLabelDisplay="auto"
+                marks
+                min={0}
+                max={sliderSize}
+                onChange={loadFrame}
+            />
+            <Slider
+                getAriaLabel={() => 'Minimum distance shift'}
+                value={timeRange}
+                onChange={handleChangeTimeSlider}
+                valueLabelDisplay="auto"
+                getAriaValueText={valuetext}
+                disableSwap
+            />
+            {/*<Slider min={0} max={sliderSize}  defaultValue={0} onChange={loadFrame} />*/}
+            {/*<Slider min={0} max={sliderSize} range defaultValue={[0, 10]}  onChange={handleChange}/>*/}
         </div>
     )
 }
