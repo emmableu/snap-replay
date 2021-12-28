@@ -5,6 +5,7 @@ import {useDimensions} from "../hooks/useDimensions.js";
 const Canvas = (props) => {
 
     const canvasRef = useRef();
+    const containerRef = useRef();
 
     let width = 900;
     let height = 600;
@@ -13,8 +14,8 @@ const Canvas = (props) => {
     useEffect(() => {
 
         function loop() {
-            width = canvasRef.current.offsetWidth;
-            height = canvasRef.current.offsetHeight;
+            width = containerRef.current.offsetWidth;
+            height = containerRef.current.offsetHeight;
             //
             if (world.fillContainer(width, height)) {
                 console.log("refill container");
@@ -39,7 +40,9 @@ const Canvas = (props) => {
     }, [])
 
     return (
-        <canvas ref={canvasRef} tabIndex={1}/>
+        <div ref={containerRef} style={{width: "100%", height: "100vh"}}>
+            <canvas ref={canvasRef} tabIndex={1}/>
+        </div>
     )
 }
 

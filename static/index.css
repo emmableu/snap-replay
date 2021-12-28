@@ -55,17 +55,14 @@ code {
 
 .panel-container {
   display: flex;
-  min-height: 300px;
+  height: 100vh;
 }
 
 .panel {
   background: white;
-  border: 1px solid gray;
-  padding: 15px;
+  border: 1px solid #A7A7A7;
 }
-.panel:first-child {
 
-}
 
 .resizer {
   width: 8px;
