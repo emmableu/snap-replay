@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-require("./snap-layout/snap-gui.js")
 
 // eslint-disable-next-line no-undef
 ReactDOM.render(
