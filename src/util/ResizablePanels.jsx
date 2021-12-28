@@ -1,13 +1,15 @@
 import React from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {setRect} from "../redux/features/rectSlice.js";
 
 const ResizablePanels = (props) => {
     const [isDragging, setIsDragging] = React.useState(false);
-    const [leftSize, setLeftSize] = React.useState(400);
+    const leftSize = useSelector(state => {return state.rect.data.leftPanelSize});
+    const dispatch = useDispatch();
 
     const startResize = (event) => {
         setIsDragging(true);
     }
-
 
     const stopResize = (event) => {
         if (isDragging) {
@@ -17,7 +19,7 @@ const ResizablePanels = (props) => {
 
     const resizePanel = (event) => {
         if (isDragging) {
-            setLeftSize(event.clientX);
+            dispatch(setRect({type: "leftPanelSize", value:event.clientX}));
         }
     }
 

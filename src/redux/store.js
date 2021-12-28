@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {rectSlice} from "./features/rectSlice";
+import rectSlice from "./features/rectSlice.js";
 
-export default configureStore({
+const store = configureStore({
    reducer: {
        rect: rectSlice
    }
 });
+
+export default store;

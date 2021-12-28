@@ -5,16 +5,16 @@ export const rectSlice = createSlice({
     name: 'rectSlice',
     initialState: {
         data: {
-
+            leftPanelSize: 400,
         },
     },
     reducers: {
-        setData: (state, action) => {
+        setRect: (state, action) => {
             const {type, value} = action.payload;
             state.data[type] = value;
         }
     }
 })
 
-export const {setData} = rectSlice.actions;
+export const {setRect} = rectSlice.actions;
 export default rectSlice.reducer;

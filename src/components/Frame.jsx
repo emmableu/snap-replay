@@ -9,18 +9,21 @@ import Slider from '@mui/material/Slider';
 import {Replayer} from "../Replayer.js";
 import ReplayerAPI from "../api/ReplayerAPI.js";
 import axios from "../axiosConfig.js"
+import {useSelector} from "react-redux";
 const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 
 
 const Frame = () => {
     const frameRef = React.useRef(null);
     const frameParentRef = React.useRef(null);
+    const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
     const [trace, setTrace] = React.useState();
     const [actorCodeList, setActorCodeList] = React.useState([])
     const [sliderSize, setSliderSize] = React.useState(0);
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(0);
     const replayer = React.useRef(null);
+    const renderer = React.useRef(null);
     const minDistance = 1;
     // const projectSelections = [ "keymove", "bullet_wrap"]
     const projectSelections = [
@@ -80,8 +83,8 @@ const Frame = () => {
     }
 
     React.useEffect( () => {
-        const renderer = new ScratchRender(frameRef.current, );
-        renderer.setLayerGroupOrdering(['group1']);
+        renderer.current = new ScratchRender(frameRef.current);
+        renderer.current.setLayerGroupOrdering(['group1']);
         ReplayerAPI.getTrace(selectedProject).then((response) => {
             setTrace(response.data);
             setSliderSize(response.data.length)
@@ -95,23 +98,29 @@ const Frame = () => {
                     label: (response.data.length - 1).toString(),
                 },
             ]);
-            replayer.current = new Replayer(renderer, selectedProject, response.data);
+            replayer.current = new Replayer(renderer.current, selectedProject, response.data);
         });
         const drawStep = function () {
-            renderer.draw();
-            // renderer.getBounds(drawableID2);
-            // renderer.isTouchingColor(drawableID2, [255,255,255]);
+            renderer.current.draw();
             requestAnimationFrame(drawStep);
         };
         // size somehow gets multiplied by 4 on mac retina displays
-        // const rect = frameParentRef.current.getBoundingClientRect();
-        // console.log("rect: ", rect);
-        const width = frameParentRef.current.offsetWidth / window.devicePixelRatio;
+        const width = leftPanelSize / window.devicePixelRatio;
         const height = width * 0.75;
         console.log("width, height: ", width, height);
-        renderer.resize(width, height);
+        renderer.current.resize(width, height);
         drawStep();
     }, [selectedProject])
+
+
+
+    React.useEffect( () => {
+        if (!renderer.current) return;
+        const width = leftPanelSize / window.devicePixelRatio;
+        const height = width * 0.75;
+        renderer.current.resize(width, height);
+        renderer.current.draw();
+    }, [leftPanelSize])
 
     function handleChangeSelect(event) {
         setSelectedProject(event.target.value)
@@ -146,14 +155,7 @@ const Frame = () => {
         replayer.current.loadFrame(parseInt(event.target.value));
     }
     return (
-        <div style={{width: "100%"}} ref={frameParentRef}>
-
-            {/*<Select defaultValue={projectSelections[0]} style={{ width: 120 }} onChange={handleChangeSelect}>*/}
-            {/*    {projectSelections.map((name, idx) => (*/}
-            {/*        <Option value={idx}>{name}</Option>*/}
-            {/*    ))}*/}
-            {/*</Select>*/}
-
+        <div style={{width: leftPanelSize, height:"100vh"}} ref={frameParentRef}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel id="demo-simple-select-helper-label">Project name</InputLabel>
                 <Select
@@ -173,10 +175,14 @@ const Frame = () => {
                 <FormHelperText>Select an example project</FormHelperText>
             </FormControl>
 
+            <div style={{backgroundColor: "red", border: "1px solid red"}}>
             <canvas
-                ref={frameRef} width="400px"
+                ref={frameRef}
             >
             </canvas>
+            </div>
+
+
             <Slider
                 aria-label="Temperature"
                 defaultValue={0}
@@ -194,9 +200,8 @@ const Frame = () => {
                 getAriaValueText={valuetext}
                 disableSwap
             />
-            {/*<Slider min={0} max={sliderSize}  defaultValue={0} onChange={loadFrame} />*/}
-            {/*<Slider min={0} max={sliderSize} range defaultValue={[0, 10]}  onChange={handleChange}/>*/}
-        </div>
+                </div>
+
     )
 }
 export default Frame;
