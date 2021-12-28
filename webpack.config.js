@@ -30,6 +30,11 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /(\.tsx|\.ts)$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
                 test: /(\.jsx|\.js)$/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
@@ -66,7 +71,7 @@ module.exports = {
         }),
     ],
     resolve: {
-        extensions: [ '.ts', '.js' ],
+        extensions: [ '.ts', '.js', '.tsx', '.jsx'],
         fallback: {
             "stream": require.resolve("stream-browserify"),
             "buffer": require.resolve("buffer")

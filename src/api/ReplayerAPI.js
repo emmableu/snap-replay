@@ -1,6 +1,8 @@
 import axios from "../axiosConfig";
+import SnapinatorApp from "../snapinator/src/SnapinatorApp";
 
 class ReplayerAPI {
+
     static async getTrace (projectName) {
         const response = await axios({
             method: 'get',
@@ -9,7 +11,7 @@ class ReplayerAPI {
         return response;
     }
 
-    static async editTrace (start, end) {
+    static async editTrace (projectName, start, end) {
         const response = await axios({
             method: 'post',
             url: `/edit`,
@@ -18,6 +20,11 @@ class ReplayerAPI {
                 end: end,
             }
         })
+        console.log("edit trace response: ", response.data);
+        const enc = new TextEncoder();
+        const projectEnc = enc.encode(response.data);
+        const snapinator = new SnapinatorApp();
+        await snapinator.getScriptsOnly(projectName, projectEnc)
         return response;
     }
 }
