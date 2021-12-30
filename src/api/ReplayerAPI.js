@@ -8,10 +8,13 @@ class ReplayerAPI {
             method: 'get',
             url: `/trace/${projectName}`,
         })
+        const snapinator = new SnapinatorApp();
+        await snapinator.getNonScripts(projectName);
         return response;
     }
 
     static async editTrace (projectName, start, end) {
+        console.log("start, end: ", start, end);
         const response = await axios({
             method: 'post',
             url: `/edit`,
@@ -24,7 +27,8 @@ class ReplayerAPI {
         const enc = new TextEncoder();
         const projectEnc = enc.encode(response.data);
         const snapinator = new SnapinatorApp();
-        await snapinator.getScriptsOnly(projectName, projectEnc)
+        await snapinator.getNonScripts(projectName);
+        // await snapinator.getScriptsOnly(projectName, projectEnc)
         return response;
     }
 }
