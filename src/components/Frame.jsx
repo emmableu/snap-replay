@@ -8,8 +8,9 @@ import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import {Replayer} from "../Replayer.js";
 import ReplayerAPI from "../api/ReplayerAPI.js";
-import axios from "../axiosConfig.js"
+import axios from "../api/axiosSpringConfig.js"
 import {useSelector} from "react-redux";
+import replayerAPI from "../api/ReplayerAPI.js";
 const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 
 
@@ -100,6 +101,9 @@ const Frame = () => {
             ]);
             replayer.current = new Replayer(renderer.current, selectedProject, response.data);
         });
+        ReplayerAPI.postSnapXML(selectedProject, null, true, false).then(
+
+        );
         const drawStep = function () {
             renderer.current.draw();
             requestAnimationFrame(drawStep);
@@ -148,6 +152,8 @@ const Frame = () => {
         } else {
             setTimeRange(newValue);
         }
+
+        replayerAPI.postScript(selectedProject, newValue[0], newValue[1])
     };
 
 
