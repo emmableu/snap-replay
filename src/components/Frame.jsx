@@ -101,7 +101,7 @@ const Frame = () => {
             ]);
             replayer.current = new Replayer(renderer.current, selectedProject, response.data);
         });
-        ReplayerAPI.postSnapXML(selectedProject, null, true, false).then(
+        ReplayerAPI.postSnapXML(selectedProject, null, "asset").then(
 
         );
         const drawStep = function () {
@@ -131,7 +131,7 @@ const Frame = () => {
     }
 
 
-    const [timeRange, setTimeRange] = React.useState([20, 37]);
+    const [timeRange, setTimeRange] = React.useState([0, 10]);
 
     const [marks, setMarks] = React.useState([{value:0, label: '0'}]);
 
@@ -149,12 +149,15 @@ const Frame = () => {
                 const clamped = Math.max(newValue[1], minDistance);
                 setTimeRange([clamped - minDistance, clamped]);
             }
-        } else {
+        }
+        else {
             setTimeRange(newValue);
         }
-
-        replayerAPI.postScript(selectedProject, newValue[0], newValue[1])
     };
+
+    const handleMouseUp = (e, newValue) => {
+        replayerAPI.postScript(selectedProject, newValue[0], newValue[1])
+    }
 
 
     const loadFrame = (event) => {
@@ -202,6 +205,7 @@ const Frame = () => {
                 getAriaLabel={() => 'Minimum distance shift'}
                 value={timeRange}
                 onChange={handleChangeTimeSlider}
+                onChangeCommitted={handleMouseUp}
                 valueLabelDisplay="auto"
                 getAriaValueText={valuetext}
                 disableSwap

@@ -22,25 +22,30 @@ class ReplayerAPI {
             }
         })
         console.log("post script response: ", response.data);
-        const enc = new TextEncoder();
-        const projectEnc = enc.encode(response.data);
+        const projectJson = response.data;
+        await this.postSnapXML(projectName, projectJson, "script");
+        // const enc = new TextEncoder();
+        // const projectEnc = enc.encode(response.data);
         return response;
     }
 
-    static async postSnapXML (projectName, projectJson, hasNonScripts, hasScripts) {
+    static async postSnapXML (projectName, projectJson, type) {
+
         const response = await axiosExpress({
             method: 'post',
             url: `/post-snap-xml/${projectName}`,
             data: {
-                projectJson,
-                hasNonScripts,
-                hasScripts
+                projectJson: projectJson === null? null: JSON.stringify(projectJson),
+                type,
             }
         })
-        if (hasNonScripts) {
+        if (type==="asset") {
             // const xml = encodeURIComponent(response.data);
             // console.log("xml: ", xml);
-            window.ide.interpretReqAnchors(response.data);
+            window.ide.interpretReqAnchors(response.data, false);
+        }
+        else if (type==="script") {
+            window.ide.interpretReqAnchors(response.data, true);
         }
         return response;
     }
