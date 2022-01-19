@@ -11,8 +11,8 @@ function App() {
             <ResizablePanels>
                 {/*<Frame />*/}
                 <EditStepper
-                    step1={<Player/>}
-                    step2={<Frame/>}
+                    // step1={<Player/>}
+                    // step2={<Frame/>}
                 />
                 <Canvas />
             </ResizablePanels>

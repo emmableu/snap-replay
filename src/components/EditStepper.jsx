@@ -8,17 +8,19 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {useSelector} from "react-redux";
 import ProjectSelector from "./ProjectSelector";
+import Frame from "./Frame";
+import Player from "./Player";
 
 const steps = ['Play the program', 'View your trace'];
 
 export default function EditStepper(props) {
     const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
-    const {step1, step2} = props;
     const [activeStep, setActiveStep] = React.useState(0);
-
+    const [forceStop, setForceStop] = React.useState(false);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setForceStop(true);
     };
 
     const handleBack = () => {
@@ -43,7 +45,7 @@ export default function EditStepper(props) {
             </Stepper>
             <React.Fragment>
                 <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-                {activeStep === 1 ? step2 : step1}
+                {activeStep === 1 ? <Frame/> : <Player forceStop={forceStop}/>}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                     <Button
                         color="inherit"

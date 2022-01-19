@@ -18,7 +18,8 @@ const Frame = () => {
     const frameRef = React.useRef(null);
     const frameParentRef = React.useRef(null);
     const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
-    const [trace, setTrace] = React.useState();
+    const trace = useSelector(state => state.trace.data);
+    const stride = useSelector(state => state.trace.stride);
     const [sliderSize, setSliderSize] = React.useState(0);
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(0);
@@ -86,21 +87,18 @@ const Frame = () => {
     React.useEffect( () => {
         renderer.current = new ScratchRender(frameRef.current);
         renderer.current.setLayerGroupOrdering(['group1']);
-        ReplayerAPI.getTrace(selectedProject).then((response) => {
-            setTrace(response.data);
-            setSliderSize(response.data.length)
-            setMarks([
-                {
-                    value: 0,
-                    label: '0',
-                },
-                {
-                    value: response.data.length - 1,
-                    label: (response.data.length - 1).toString(),
-                },
-            ]);
-            replayer.current = new Replayer(renderer.current, selectedProject, response.data);
-        });
+        setSliderSize(trace.length)
+        setMarks([
+            {
+                value: 0,
+                label: '0',
+            },
+            {
+                value: trace.length - 1,
+                label: (trace.length - 1).toString(),
+            },
+        ]);
+        replayer.current = new Replayer(renderer.current, selectedProject, trace);
         ReplayerAPI.postSnapXML(selectedProject, null, "asset").then(
 
         );
@@ -153,7 +151,7 @@ const Frame = () => {
     };
 
     const handleMouseUp = (e, newValue) => {
-        replayerAPI.postScript(selectedProject, newValue[0], newValue[1])
+        replayerAPI.postScript(selectedProject, newValue[0], newValue[1], stride)
     }
 
 

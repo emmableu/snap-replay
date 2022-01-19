@@ -72,9 +72,9 @@ module.exports = {
     ],
     resolve: {
         extensions: [ '.ts', '.js', '.tsx', '.jsx'],
-        fallback: {
+        // fallback: {
             // "stream": require.resolve("stream-browserify"),
             // "buffer": require.resolve("buffer")
-        }
+        // }
     },
 };

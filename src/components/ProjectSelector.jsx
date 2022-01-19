@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 
 const ProjectSelector = () => {
+    const dispatch = useDispatch();
     const projectSelections = [
         "02-Boat Race",
         "03-Taco Defence",
@@ -56,7 +57,7 @@ const ProjectSelector = () => {
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
 
     function handleChangeSelect(event) {
-        setSelectedProject(event.target.value)
+        dispatch(setSelectedProject(event.target.value));
     }
 
     return (
