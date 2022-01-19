@@ -19,60 +19,60 @@ const Frame = () => {
     const frameParentRef = React.useRef(null);
     const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
     const [trace, setTrace] = React.useState();
-    const [actorCodeList, setActorCodeList] = React.useState([])
     const [sliderSize, setSliderSize] = React.useState(0);
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(0);
     const replayer = React.useRef(null);
     const renderer = React.useRef(null);
     const minDistance = 1;
+    const selectedProject = useSelector(state => state.selectedProject.data.selected);
     // const projectSelections = [ "keymove", "bullet_wrap"]
-    const projectSelections = [
-        "02-Boat Race",
-        "03-Taco Defence",
-        "04-Lost In Space",
-        "05-Ada Poetry Generator",
-        "06-Skiing",
-        "07-CATS!",
-        "08-ChatBot",
-        "09-Clone Wars",
-        "10-Sprint",
-        "11-Rock Band",
-        "12-The Scratch Olympics Weightlifter",
-        "13-Username Generator",
-        "14-Space Quiz",
-        "15-FruitCatching",
-        "16-Flower Generator",
-        "acceleration",
-        "ask_random_question",
-        "asteroid_alien_move",
-        "bullet_wrap",
-        "button_select",
-        "carousel",
-        "checkout_list",
-        "click_show_calendar",
-        "collision_change_score",
-        "collision_explosion",
-        "hit_remove",
-        "inertia",
-        "initialize_fish_property",
-        "initialize_to_random",
-        "jump",
-        "key_trigger_bounce",
-        "keymove",
-        "move_between_points",
-        "move_free",
-        "move_with_mouse",
-        "multiple_choice_question",
-        "paddle",
-        "radio_options",
-        "shoot_bullets",
-        "show_hide_calendar",
-        "spawn_enemies",
-        "start_button",
-        "timer",
-        "turn_smaller"];
-    const [selectedProject, setSelectedProject] = React.useState(projectSelections[0]);
+    // const projectSelections = [
+    //     "02-Boat Race",
+    //     "03-Taco Defence",
+    //     "04-Lost In Space",
+    //     "05-Ada Poetry Generator",
+    //     "06-Skiing",
+    //     "07-CATS!",
+    //     "08-ChatBot",
+    //     "09-Clone Wars",
+    //     "10-Sprint",
+    //     "11-Rock Band",
+    //     "12-The Scratch Olympics Weightlifter",
+    //     "13-Username Generator",
+    //     "14-Space Quiz",
+    //     "15-FruitCatching",
+    //     "16-Flower Generator",
+    //     "acceleration",
+    //     "ask_random_question",
+    //     "asteroid_alien_move",
+    //     "bullet_wrap",
+    //     "button_select",
+    //     "carousel",
+    //     "checkout_list",
+    //     "click_show_calendar",
+    //     "collision_change_score",
+    //     "collision_explosion",
+    //     "hit_remove",
+    //     "inertia",
+    //     "initialize_fish_property",
+    //     "initialize_to_random",
+    //     "jump",
+    //     "key_trigger_bounce",
+    //     "keymove",
+    //     "move_between_points",
+    //     "move_free",
+    //     "move_with_mouse",
+    //     "multiple_choice_question",
+    //     "paddle",
+    //     "radio_options",
+    //     "shoot_bullets",
+    //     "show_hide_calendar",
+    //     "spawn_enemies",
+    //     "start_button",
+    //     "timer",
+    //     "turn_smaller"];
+    // const [selectedProject, setSelectedProject] = React.useState(projectSelections[0]);
 
     const handleChange = (range) => {
         setStart(range[0])
@@ -126,9 +126,6 @@ const Frame = () => {
         renderer.current.draw();
     }, [leftPanelSize])
 
-    function handleChangeSelect(event) {
-        setSelectedProject(event.target.value)
-    }
 
 
     const [timeRange, setTimeRange] = React.useState([0, 10]);
@@ -164,27 +161,10 @@ const Frame = () => {
         replayer.current.loadFrame(parseInt(event.target.value));
     }
     return (
-        <div style={{width: leftPanelSize, height:"100vh"}} ref={frameParentRef}>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-helper-label">Project name</InputLabel>
-                <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={selectedProject}
-                    label="Age"
-                    onChange={handleChangeSelect}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                        {projectSelections.map((name) => (
-                            <MenuItem value={name}>{name}</MenuItem>
-                        ))}
-                </Select>
-                <FormHelperText>Select an example project</FormHelperText>
-            </FormControl>
+        <div style={{width: leftPanelSize, height: leftPanelSize * 3/4 + 300}} ref={frameParentRef}>
 
             <div style={{backgroundColor: "red", border: "1px solid red"}}>
+            {/*<div>*/}
             <canvas
                 ref={frameRef}
             >
