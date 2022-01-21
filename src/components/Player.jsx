@@ -8,7 +8,8 @@ import {useSelector, useDispatch} from "react-redux";
 import {setStride, setTrace} from "../redux/features/traceSlice";
 
 const Player = (props) => {
-    const forceStop = props.forceStop;
+    const {nextEnabled, setNextEnabled} = props;
+    const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
     const playerRef = React.useRef();
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
     const scratch = React.useRef();
@@ -22,11 +23,15 @@ const Player = (props) => {
             scratch.current = new ScratchStage(playerRef.current);
             window.scratch = scratch.current;
         }
+        const width = leftPanelSize / window.devicePixelRatio;
+        const height = width * 0.75;
+        scratch.current.vm.renderer.resize(width, height);
         const sb3 = await ReplayerAPI.getSB3(selectedProject);
         await scratch.current.vm.loadProject(sb3).then(r => console.log("complete loading project"));
         await new Promise(r => setTimeout(r, 500));
         scratch.current.start();
-    })
+    }, [selectedProject])
+
 
     const handleGreenFlag = (e) => {
         scratch.current.greenFlag();
@@ -45,15 +50,10 @@ const Player = (props) => {
             res => {
                 dispatch(setTrace(res.data));
                 scratch.current.clearTrace();
+                setNextEnabled(true);
             }
         )
     }
-
-    React.useEffect(() => {
-        if (scratch.current) {
-            stop();
-        }
-    }, [forceStop]);
 
 
     return (

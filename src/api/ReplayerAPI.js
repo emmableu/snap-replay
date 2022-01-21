@@ -33,10 +33,10 @@ class ReplayerAPI {
     static async postScript (projectName, start, end, stride) {
         const response = await axiosSpring({
             method: 'post',
-            url: `/post-script/${projectName}/${stride}`,
+            url: `/post-script/${projectName}`,
             data: {
-                start: start,
-                end: end,
+                start: start * stride,
+                end: end * stride,
             }
         })
         console.log("post script response: ", response.data);
@@ -57,7 +57,7 @@ class ReplayerAPI {
                 type,
             }
         })
-        if (type==="asset") {
+        if (type==="asset" || type === "full") {
             // const xml = encodeURIComponent(response.data);
             // console.log("xml: ", xml);
             window.ide.interpretReqAnchors(response.data, false);
@@ -67,22 +67,6 @@ class ReplayerAPI {
         }
         return response;
     }
-
-    // static async editTrace (projectName, start, end) {
-    //     console.log("start, end: ", start, end);
-    //     const response = await axios({
-    //         method: 'post',
-    //         url: `/edit`,
-    //         data: {
-    //             start: start,
-    //             end: end,
-    //         }
-    //     })
-    //     console.log("edit trace response: ", response.data);
-    //     const enc = new TextEncoder();
-    //     const projectEnc = enc.encode(response.data);
-    //     return response;
-    // }
 }
 
 export default ReplayerAPI

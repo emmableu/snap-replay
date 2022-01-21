@@ -1,18 +1,20 @@
 import React, {useRef, useState, useEffect} from "react";
 import ReactDOM from "react-dom";
 import {useDimensions} from "../hooks/useDimensions.js";
+import {useSelector} from "react-redux";
+import ReplayerAPI from "../api/ReplayerAPI";
 
 const Canvas = (props) => {
 
     const canvasRef = useRef();
     const containerRef = useRef();
+    const selectedProject = useSelector(state => state.selectedProject.data.selected)
 
     let width = 900;
     let height = 600;
 
 
     useEffect(() => {
-
         function loop() {
             width = containerRef.current.offsetWidth;
             height = containerRef.current.offsetHeight;
@@ -38,6 +40,11 @@ const Canvas = (props) => {
         window.ide = ide;
         loop();
     }, [])
+
+    useEffect(() => {
+        ReplayerAPI.postSnapXML(selectedProject, null, "asset").then(
+        );
+    }, [selectedProject])
 
     return (
         <div ref={containerRef} style={{width: "100%", height: "100vh"}}>

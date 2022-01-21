@@ -16,11 +16,10 @@ const steps = ['Play the program', 'View your trace'];
 export default function EditStepper(props) {
     const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
     const [activeStep, setActiveStep] = React.useState(0);
-    const [forceStop, setForceStop] = React.useState(false);
+    const [nextEnabled, setNextEnabled] = React.useState(false);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setForceStop(true);
     };
 
     const handleBack = () => {
@@ -45,7 +44,10 @@ export default function EditStepper(props) {
             </Stepper>
             <React.Fragment>
                 <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-                {activeStep === 1 ? <Frame/> : <Player forceStop={forceStop}/>}
+                {activeStep === 1 ? <Frame/> : <Player
+                    nextEnabled={nextEnabled}
+                    setNextEnabled={setNextEnabled}
+                />}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                     <Button
                         color="inherit"
@@ -57,7 +59,9 @@ export default function EditStepper(props) {
                     </Button>
                     <Box sx={{ flex: '1 1 auto' }} />
 
-                    <Button onClick={handleNext}>
+                    <Button onClick={handleNext}
+                            disabled={!nextEnabled}
+                    >
                         {activeStep === steps.length - 1 ? '' : 'Next'}
                     </Button>
                 </Box>
