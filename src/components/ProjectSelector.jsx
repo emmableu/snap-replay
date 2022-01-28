@@ -10,6 +10,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 const ProjectSelector = () => {
     const dispatch = useDispatch();
     const projectSelections = [
+        "flower collection",
         "02-Boat Race",
         "03-Taco Defence",
         "04-Lost In Space",

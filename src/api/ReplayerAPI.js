@@ -23,7 +23,7 @@ class ReplayerAPI {
     static async getSB3 (projectName) {
         // both below works! but I've removed the sb3 folder from java spring server just to keep repo small, so I'm using the first one.
         // to make second one work, just add the sb3 folder back to the java spring server.
-        const blob = await fetch(`http://localhost:8080/project/${projectName}/project.json`).then(r => r.blob());
+        const blob = await fetch(`${axiosSpring.defaults.baseURL}/project/${projectName}/project.json`).then(r => r.blob());
         // const blob = await fetch('http://localhost:8080/sb3/27-Flappy%20Parrot.sb3').then(r => r.blob());
         const buffer = await blob.arrayBuffer();
         console.log("buffer: ", buffer);

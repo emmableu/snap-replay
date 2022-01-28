@@ -15,13 +15,18 @@ export class Replayer {
     loadFrame(frameId) {
         if (frameId >= this.trace.length) return;
         let drawables = this.trace[frameId];
+        console.log("drawables: ", drawables);
         const curFrameDrawableSet = new Set(drawables.map(d => d.id));
-        // this.prevFrameDrawableSet.forEach((oldId) => {
-        //     if (this.drawableMap[oldId]) {
-        //         this.renderer.destroyDrawable(this.drawableMap[oldId], "group1");
-        //     }
-        // })
+        this.prevFrameDrawableSet.forEach((oldId) => {
+            if (!curFrameDrawableSet.has(oldId)) {
+                console.log("this.drawableMap[oldId]: ", this.drawableMap[oldId]);
+                this.renderer.destroyDrawable(this.drawableMap[oldId], "group1");
+                // this.drawableMap.delete(oldId);
+                delete this.drawableMap[oldId]
+            }
+        })
         this.prevFrameDrawableSet = curFrameDrawableSet;
+        console.log("-------------------------------- frameId: ", frameId);
         drawables.forEach(d => {
             let drawableId = this.drawableMap[d.id];
             let bitMapSkinId = this.costumeMap[d.skinId];
@@ -70,8 +75,11 @@ export class Replayer {
             // this.renderer.updateDrawableSkinId(drawableId, this.costumeMap[d.skinId]);
             // this.renderer.updateDrawablePosition(drawableId, [d.posx, d.poxy])
             this.renderer.updateDrawableProperties(drawableId, properties);
+            this.renderer.updateDrawableEffect(drawableId, "color", properties.color)
             this.renderer.updateDrawableDirectionScale(drawableId, d.direction, [d.scalex, d.scaley])
             this.renderer.updateDrawableVisible(drawableId, d.visible);
+            console.log("d: ", d.visible);
+            // this.renderer.draw();
         });
     }
 }

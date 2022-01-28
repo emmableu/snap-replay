@@ -3,7 +3,9 @@ import axios from "axios";
 import 'regenerator-runtime/runtime';
 const instance = axios.create({
 // .. where we make our configurations
-    baseURL: "http://localhost:8080/"
+    baseURL: "http://localhost:8082/"
+//     baseURL: "http://isnap.csc.ncsu.edu:8080/service/"
+    // baseURL: "http://localhost:8080/service/"
 });
 
 const handleRequest = async (request) => {
