@@ -12,12 +12,12 @@ class ReplayerAPI {
     // }
 
     static async postTrace (projectName, trace, stride) {
-        const response = await axiosSpring({
-            method: 'post',
-            url: `/post-trace/${projectName}/${stride}`,
-            data: trace
-        })
-        return response;
+        // const response = await axiosSpring({
+        //     method: 'post',
+        //     url: `/post-trace/${userId}/${projectName}/${stride}`,
+        //     data: trace
+        // })
+        // return response;
     }
 
     static async getSB3 (projectName) {
@@ -30,20 +30,25 @@ class ReplayerAPI {
         return buffer
     }
 
-    static async postScript (projectName, start, end, stride) {
+    static async postScript (projectName, isOriginal, start, end, stride) {
         const response = await axiosSpring({
             method: 'post',
-            url: `/post-script/${projectName}`,
+            url: `/post-script/wwang33/${projectName}`,
             data: {
+                projectName: projectName,
+                isOriginal: isOriginal,
                 start: start * stride,
                 end: end * stride,
             }
         })
         console.log("post script response: ", response.data);
         const projectJson = response.data;
-        await this.postSnapXML(projectName, projectJson, "script");
-        // const enc = new TextEncoder();
-        // const projectEnc = enc.encode(response.data);
+        if (isOriginal) {
+            await this.postSnapXML(projectName, projectJson, "original");
+        }
+        else {
+            await this.postSnapXML(projectName, projectJson, "script");
+        }
         return response;
     }
 
@@ -57,14 +62,18 @@ class ReplayerAPI {
                 type,
             }
         })
-        if (type==="asset" || type === "full") {
-            // const xml = encodeURIComponent(response.data);
-            // console.log("xml: ", xml);
-            window.ide.interpretReqAnchors(response.data, false);
+
+        // window.ide.slice = response.data.slice;
+        window.ide.code = response.data;
+
+
+        if (type==="asset" || type === "original") {
+            window.ide.interpretReqAnchors(response.data.full, false);
         }
         else if (type==="script") {
-            window.ide.interpretReqAnchors(response.data, true);
+            window.ide.interpretReqAnchors(response.data.full, true);
         }
+        // else if (type === "sprite")
         return response;
     }
 }

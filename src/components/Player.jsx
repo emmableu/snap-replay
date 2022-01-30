@@ -44,12 +44,19 @@ const Player = (props) => {
     const stop = () => {
         scratch.current.stop();
         const trace = scratch.current.traceLogger.trace;
-        const stride = Math.floor(trace.length / 100);
-        dispatch(setStride(stride));
-        ReplayerAPI.postTrace(selectedProject, trace, stride).then(
+        // const stride = Math.floor(trace.endIdx / 100);
+        dispatch(setTrace({...trace}));
+        dispatch(setStride(1));
+        // ReplayerAPI.postTrace(selectedProject, trace, stride).then(
+        //     res => {
+        //         dispatch(setTrace(res.data));
+        //         scratch.current.clearTrace();
+        //         setNextEnabled(true);
+        //     }
+        // )
+        scratch.current.clearTrace();
+        ReplayerAPI.postScript(selectedProject, true, 0, 0, 0).then(
             res => {
-                dispatch(setTrace(res.data));
-                scratch.current.clearTrace();
                 setNextEnabled(true);
             }
         )

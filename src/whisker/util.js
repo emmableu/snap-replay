@@ -16,7 +16,7 @@ const SCRATCH_KEY = {
  * @type {{SPACE: string, DOWN: string, LEFT: string, ARROW_RIGHT: string, ARROW_DOWN: string, RIGHT: string, ENTER: string, UP: string, ARROW_UP: string, ARROW_LEFT: string}}
  */
 const KEYBOARD_KEY = {
-    SPACE: ' ',
+    SPACE: 'Space',
     LEFT: 'Left',
     ARROW_LEFT: 'ArrowLeft',
     UP: 'Up',

@@ -34,7 +34,7 @@ const Frame = () => {
     const handleChangeSwitch = (event) => {
         const newChecked = event.target.checked;
         if (newChecked) {
-            replayerAPI.postSnapXML(selectedProject, null, "full").then(
+            replayerAPI.postScript(selectedProject, true, 0, 0, 0).then(
                 res => setChecked(true)
             )
         }
@@ -42,7 +42,7 @@ const Frame = () => {
             // replayerAPI.postSnapXML(selectedProject, null, "full").then(
             //     res => setChecked(false)
             // )
-            replayerAPI.postScript(selectedProject, timeRange[0], timeRange[1], stride).then(
+            replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride).then(
                 res => setChecked(false)
             )
         }
@@ -55,15 +55,15 @@ const Frame = () => {
     React.useEffect(  () => {
         renderer.current = new ScratchRender(frameRef.current);
         renderer.current.setLayerGroupOrdering(['group1']);
-        setSliderSize(trace.length)
+        setSliderSize(trace.endIdx)
         setMarks([
             {
                 value: 0,
                 label: '0',
             },
             {
-                value: trace.length - 1,
-                label: (trace.length - 1).toString(),
+                value: trace.endIdx,
+                label: trace.endIdx.toString(),
             },
         ]);
         replayer.current = new Replayer(renderer.current, selectedProject, trace);
@@ -77,7 +77,7 @@ const Frame = () => {
         console.log("width, height: ", width, height);
         renderer.current.resize(width, height);
         drawStep();
-        replayerAPI.postScript(selectedProject, timeRange[0], timeRange[1], stride)
+        replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride)
     }, [selectedProject])
 
 
@@ -116,7 +116,7 @@ const Frame = () => {
     };
 
     const handleMouseUp = (e, newValue) => {
-        replayerAPI.postScript(selectedProject, newValue[0], newValue[1], stride)
+        replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
     }
 
 
