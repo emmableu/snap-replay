@@ -55,7 +55,7 @@ const Frame = () => {
     React.useEffect(  () => {
         renderer.current = new ScratchRender(frameRef.current);
         renderer.current.setLayerGroupOrdering(['group1']);
-        setSliderSize(trace.endIdx)
+        setSliderSize(100)
         setMarks([
             {
                 value: 0,
@@ -121,7 +121,7 @@ const Frame = () => {
 
 
     const loadFrame = (event) => {
-        replayer.current.loadFrame(parseInt(event.target.value));
+        replayer.current.loadFrame(parseInt(event.target.value) * stride);
     }
 
     return (
