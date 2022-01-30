@@ -1,5 +1,6 @@
 import axios from "./api/axiosSpringConfig.js"
 import Bisect from "./util/Bisect";
+import TraceLogger from "./whisker/trace-logger";
 
 export class Replayer {
     constructor(renderer, selectedProject, trace) {
@@ -12,33 +13,34 @@ export class Replayer {
         this.prevFrameDrawableSet = new Set();
     }
 
-    // setTrace (trace) {
-    //     this.trace = trace;
-    // }
 
     getCurFrameDrawables (frameId) {
         let drawableLst = []
         for (const [id, obj] of Object.entries(this.trace.drawables)) {
-            const posx = obj.posx.data[Bisect.ub(obj.posx.id, frameId)];
-            const posy = obj.posy.data[Bisect.ub(obj.posy.id, frameId)];
-            const skinId = obj.skinId.data[Bisect.ub(obj.skinId.id, frameId)];
-            drawableLst.push(
-                {id, posx, posy, skinId,
-                    brightness: 0,
-                    color: 0,
-                    direction: 180,
-                    fisheye: 1,
-                    ghost: 1,
-                    mosaic: 1,
-                    pixelate: 0,
-                    scaleboth: [100, 100],
-                    scalex: 100,
-                    scaley: 100,
-                    skinSize:[100,100],
-                    visible: true,
-                    whirl: -0,
-                }
-            )
+            let drawableObj = {}
+            for (const attribute of TraceLogger.attributeLst) {
+                console.log(attribute);
+                const idx = Bisect.ub(obj[attribute].id, frameId);
+                if (idx === -1) break;
+                drawableObj[attribute] = obj[attribute].data[idx];
+                drawableObj = {...drawableObj,
+                ...{
+                            brightness: 0,
+                            color: 0,
+                            direction: 90,
+                            fisheye: 1,
+                            ghost: 1,
+                            mosaic: 1,
+                            pixelate: 0,
+                            scalex: 100,
+                            scaley: 100,
+                            whirl: -0,
+                }}
+            }
+            drawableObj.id = id;
+            drawableLst.push(drawableObj);
+
+
         }
         return drawableLst
     }
@@ -82,6 +84,8 @@ export class Replayer {
                 switch (key) {
                     case 'scalex':
                     case 'scaley':
+                    case 'skinSizeX':
+                    case 'skinSizeY':
                     case 'id':
                         break;
                     case 'posx':
@@ -90,9 +94,6 @@ export class Replayer {
                     case 'posy':
                         properties['position'][1] = value;
                         break;
-                    case 'scaleboth':
-                        properties['scale'] = value;
-                        break;
                     case 'skinId':
                         properties['skinId'] = this.costumeMap[d.skinId];
                         break;
@@ -100,6 +101,8 @@ export class Replayer {
                         properties[key] = d[key];
                 }
             });
+            properties['scale'] = [d.scalex, d.scaley];
+            properties['skinSize'] = [d.skinSizeX, d.skinSizeY]
 
             // this.renderer.updateDrawableProperties(drawableId, properties);
             // this.renderer.updateDrawableSkinId(drawableId, this.costumeMap[d.skinId]);

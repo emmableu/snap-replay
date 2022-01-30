@@ -19,7 +19,35 @@ class TraceLogger {
             "control_repeat", // "repeat"  NumExpr "times" StmtList
             "control_repeat_until", // "until" BoolExpr "repeat" StmtList
             "control_forever", //"repeat" "forever" StmtList
-        ])
+        ]);
+    }
+
+    // static attributeLst = ["posx", "posy", "skinId",
+    //     "brightness", "color", "direction", "fisheye",
+    //     "ghost", "mosaic", "pixelate",
+    //     "scalex", "scaley", "skinSizeX", "skinSizeY", "visible", "whirl"
+    // ]
+    static attributeLst = ["posx", "posy", "skinId","skinSizeX", "skinSizeY", "visible",
+        // "brightness", "color", "direction", "fisheye",
+        // "ghost", "mosaic", "pixelate",
+        // "scalex", "scaley",  "visible", "whirl"
+    ]
+
+    fillAttribute(attribute, d, obj) {
+        if (attribute.startsWith("skin")) return;
+        if (attribute === "posx") obj[attribute] = d._position[0];
+        else if (attribute === "posy") obj[attribute] = d._position[1];
+        else if (attribute === "direction") obj[attribute] = d._direction;
+        else if (attribute === "visible") obj[attribute] = d._visible;
+        else if (attribute === "scalex") obj[attribute] = d._scale[0];
+        else if (attribute === "scaley") obj[attribute] = d._scale[1];
+        else if (attribute === "color") obj[attribute] = d._uniforms.u_color;
+        else if (attribute === "whirl") obj[attribute] = d._uniforms.u_whirl;
+        else if (attribute === "fisheye") obj[attribute] = d._uniforms.u_fisheye;
+        else if (attribute === "pixelate") obj[attribute] = d._uniforms.u_pixelate;
+        else if (attribute === "mosaic") obj[attribute] = d._uniforms.u_mosaic;
+        else if (attribute === "brightness") obj[attribute] = d._uniforms.u_brightness;
+        else if (attribute === "ghost") obj[attribute] = d._uniforms.u_ghost;
     }
 
     addAttributeToDrawable(attributeName, newVal, drawableId) {
@@ -61,90 +89,38 @@ class TraceLogger {
         const cloneSet = new Set(clones);
         const skinId = target.sprite.costumes.map(c => c.md5)[target.currentCostume];
         console.log("trace", this.trace);
+
         for (const d of target.renderer._allDrawables) {
             if (!d) continue;
             const drawableId = d._id.toString();
-            if (drawableId in this.trace.drawables && ! (cloneSet.has(drawableId))) continue;
-            const [posx, posy] = d._position;
+            if (! (cloneSet.has(drawableId))) continue;
+            // it is incomplete to only check the current target's clones. But this is the
+            // most time-efficient way.
+            let [skinSizeX, skinSizeY] = [-1, -1];
+            if (d.skin) {[skinSizeX, skinSizeY] = target.renderer.getCurrentSkinSize(d._id);}
+            const obj = {skinId, skinSizeX, skinSizeY};
+            for (const attribute of TraceLogger.attributeLst) {
+                this.fillAttribute(attribute, d, obj);
+            }
+
             if (!(drawableId in this.trace.drawables)) {
                 // if it's not in the trace yet, add it in;
-                this.trace.drawables[drawableId] = {
-                    posx: {data: [posx], id: [this.curId]},
-                    posy: {data: [posy], id: [this.curId]},
-                    skinId: {data: [skinId], id: [this.curId]},
-                };
+                this.trace.drawables[drawableId] = {};
+                for (const attribute of TraceLogger.attributeLst) {
+                    this.trace.drawables[drawableId][attribute] = {
+                        data: [obj[attribute]], id: [this.curId]
+                    }
+                }
+
             }
             // if it's already in trace, only do something if it's part of current
             // target's clone.
             else if (cloneSet.has(drawableId)) {
-                this.addAttributeToDrawable("posx", posx, drawableId);
-                this.addAttributeToDrawable("posy", posy, drawableId);
-                this.addAttributeToDrawable("skinId", skinId, drawableId);
+                for (const attribute of TraceLogger.attributeLst) {
+                    this.addAttributeToDrawable(attribute, obj[attribute], drawableId)
+                }
             }
         }
-
-        for (const drawable of target.renderer._allDrawables) {
-            if (!drawable) {
-                continue;
-            }
-            let skinSize = [-1, -1];
-            if (drawable.skin) {
-                skinSize = target.renderer.getCurrentSkinSize(drawable._id);
-            }
-            const propertiesToLog = {};
-            propertiesToLog.id = drawable._id;
-            propertiesToLog.posx = drawable._position[0];
-            propertiesToLog.posy = drawable._position[1];
-            propertiesToLog.direction = drawable._direction;
-            propertiesToLog.visible = drawable._visible;
-            propertiesToLog.skinSize = skinSize;
-            propertiesToLog.scalex = drawable._scale[0];
-            propertiesToLog.scaley = drawable._scale[1];
-            propertiesToLog.scaleboth = drawable._scale.slice(0, 2);
-            propertiesToLog.color = drawable._uniforms.u_color;
-            propertiesToLog.whirl = drawable._uniforms.u_whirl;
-            propertiesToLog.fisheye = drawable._uniforms.u_fisheye;
-            propertiesToLog.pixelate = drawable._uniforms.u_pixelate;
-            propertiesToLog.mosaic = drawable._uniforms.u_mosaic;
-            propertiesToLog.brightness = drawable._uniforms.u_brightness;
-            propertiesToLog.ghost = drawable._uniforms.u_ghost;
-            console.log("properties: ", propertiesToLog);
-        //     allDrawableCopy.push(propertiesToLog);
-        }
-        // // const allTargets = [];
-        // // for (const target of vm.runtime.targets) {
-        // //     allTargets.push(
-        // //         {
-        // //             "id": target.id,
-        // //             "drawableID": target.drawableID,
-        // //             "currentCostume": target.currentCostume,
-        // //             "sprite": {
-        // //                 "clones": target.sprite.clones.map(t => t.drawableID),
-        // //                 "name": target.sprite.name,
-        // //                 "costumes": target.sprite.costumes.map(c => c.md5),
-        // //             }
-        // //         }
-        // //     )
-        // // }
-        //
-        // this.trace.push(
-        //     {
-        //         clockTime: clockTime,
-        //         blockId: blockId,
-        //         allTargets: allTargets,
-        //         target: {
-        //             isStage: target.isStage,
-        //             name: target.getName(),
-        //             visible: target.visible,
-        //             drawableID: target.drawableID,
-        //             currentCostume: target.currentCostume,
-        //             layerOrder: target.hasOwnProperty('layerOrder') ? target.layerOrder : 'undefined',
-        //             variables: variables
-        //         },
-        //         allDrawables: allDrawableCopy,
-        //         stageVariables: stageVariables,
-        //         keysDown: keysDown
-        //     });
     }
 
     /**
