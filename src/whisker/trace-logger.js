@@ -69,15 +69,15 @@ class TraceLogger {
 
         this.curId += 1;
         this.trace.endIdx = this.curId;
-
-        const blocksData = this.trace.blocks.data;
-
-        if (
-            blocksData.length === 0 ||
-            blockId !== blocksData[blocksData.length - 1]) {
-            blocksData.push(blockId);
-            this.trace.blocks.id.push(this.curId);
-        }
+        this.trace.blocks.push(blockId);
+        // const blocksData = this.trace.blocks.data;
+        //
+        // if (
+        //     blocksData.length === 0 ||
+        //     blockId !== blocksData[blocksData.length - 1]) {
+        //     blocksData.push(blockId);
+        //     this.trace.blocks.id.push(this.curId);
+        // }
 
         let keysDown;
         let keysDownList = target.runtime.ioDevices.keyboard._keysPressed;
@@ -191,7 +191,7 @@ class TraceLogger {
     clearTrace () {
         this.trace =  {
             drawables: {},
-            blocks: {data: [], id: []},
+            blocks: [],
             keysDown: {data: [], id: []},
             endIdx: -1
         };

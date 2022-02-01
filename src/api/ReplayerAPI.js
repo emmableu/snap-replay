@@ -41,9 +41,8 @@ class ReplayerAPI {
                 end: end * stride,
             }
         })
-        console.log("post script response: ", response.data);
+        // console.log("post script response: ", response.data);
         const projectJson = response.data;
-        window.ide.scratchProgram = projectJson;
         if (isOriginal) {
             await this.postSnapXML(projectName, projectJson, "original");
         }

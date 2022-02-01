@@ -15,6 +15,7 @@ const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import Bisect from "../util/Bisect";
 
 const Frame = () => {
     const frameRef = React.useRef(null);
@@ -23,7 +24,7 @@ const Frame = () => {
     const trace = useSelector(state => state.trace.data);
     const stride = useSelector(state => state.trace.stride);
     const [sliderSize, setSliderSize] = React.useState(0);
-    const [checked, setChecked] = React.useState(false);
+    const [originalMode, setOriginalMode] = React.useState(false);
     const replayer = React.useRef(null);
     const renderer = React.useRef(null);
     const minDistance = 1;
@@ -33,17 +34,18 @@ const Frame = () => {
 
     const handleChangeSwitch = (event) => {
         const newChecked = event.target.checked;
+        setOriginalMode(newChecked);
         if (newChecked) {
             replayerAPI.postScript(selectedProject, true, 0, 0, 0).then(
-                res => setChecked(true)
+                res => setOriginalMode(true)
             )
         }
         else {
             // replayerAPI.postSnapXML(selectedProject, null, "full").then(
-            //     res => setChecked(false)
+            //     res => setOriginalMode(false)
             // )
             replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride).then(
-                res => setChecked(false)
+                res => setOriginalMode(false)
             )
         }
     };
@@ -116,11 +118,16 @@ const Frame = () => {
     };
 
     const handleMouseUp = (e, newValue) => {
-        const startIdx = Bisect.ub(trace.blocks.id, newValue[0]);
-        const endIdx = Bisect.ub(trace.blocks.id, newValue[1]);
-        const traceBlocks = trace.blocks.data.slice(startIdx, endIdx);
-        window.ide.highlightRunningCode(traceBlocks);
-        replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
+        // const startIdx = Bisect.ub(trace.blocks.id, newValue[0]);
+        // const endIdx = Bisect.ub(trace.blocks.id, newValue[1]);
+        const traceBlocks =  new Set(trace.blocks.slice(newValue[0], newValue[1]));
+        window.ide.traceBlocks = traceBlocks;
+        if (!originalMode) {
+            replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
+        }
+        else {
+            window.ide.highlightRunningCode(traceBlocks);
+        }
     }
 
 
@@ -161,7 +168,7 @@ const Frame = () => {
             {/*<Button onClick={showFullCode}>Show Complete Code</Button>*/}
             <FormGroup>
                 <FormControlLabel
-                    checked={checked}
+                    originalMode={originalMode}
                     onChange={handleChangeSwitch}
                     control={<Switch />} label="Show Full Project" />
             </FormGroup>
