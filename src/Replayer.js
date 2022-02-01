@@ -16,14 +16,37 @@ export class Replayer {
 
     getCurFrameDrawables (frameId) {
         let drawableLst = []
+        if (this.trace.stage){
+            drawableLst.push({
+                id: this.trace.stage.drawableId,
+                posx: 0,
+                posy: 0,
+                skinSizeX: 100,
+                skinSizeY: 100,
+                visible: true,
+                brightness: 0,
+                color: 0,
+                direction: 90,
+                fisheye: 1,
+                ghost: 1,
+                mosaic: 1,
+                pixelate: 0,
+                scalex: 100,
+                scaley: 100,
+                whirl: -0,
+                skinId: this.trace.stage.skinId,
+            })
+        }
         for (const [id, obj] of Object.entries(this.trace.drawables)) {
+            if (frameId > obj.endIdx) continue;
             let drawableObj = {}
             for (const attribute of TraceLogger.attributeLst) {
+                if (!obj[attribute]) break;
                 console.log(attribute);
                 const idx = Bisect.ub(obj[attribute].id, frameId);
                 if (idx === -1) break;
                 drawableObj[attribute] = obj[attribute].data[idx];
-                drawableObj = {...drawableObj,
+                drawableObj = {
                 ...{
                             brightness: 0,
                             color: 0,
@@ -35,7 +58,9 @@ export class Replayer {
                             scalex: 100,
                             scaley: 100,
                             whirl: -0,
-                }}
+                },
+                    ...drawableObj,
+                }
             }
             drawableObj.id = id;
             drawableLst.push(drawableObj);

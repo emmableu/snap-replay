@@ -27,7 +27,8 @@ class TraceLogger {
     //     "ghost", "mosaic", "pixelate",
     //     "scalex", "scaley", "skinSizeX", "skinSizeY", "visible", "whirl"
     // ]
-    static attributeLst = ["posx", "posy", "skinId","skinSizeX", "skinSizeY", "visible",
+    static attributeLst = ["posx", "posy", "skinId","skinSizeX", "skinSizeY",
+        "visible","direction",
         // "brightness", "color", "direction", "fisheye",
         // "ghost", "mosaic", "pixelate",
         // "scalex", "scaley",  "visible", "whirl"
@@ -60,7 +61,12 @@ class TraceLogger {
 
     logExecutionTrace (blockId, vm, target) {
         const block = target.blocks.getBlock(blockId);
-        if (!block || block.opcode in this.ignoreOpcodes) return;
+        // if (block) {
+        //     console.log("block.opcode: ", block.opcode);
+        // }
+        if (!block || this.ignoreOpcodes.has(block.opcode)) return;
+        console.log("block.opcode: ", block.opcode);
+
         this.curId += 1;
         this.trace.endIdx = this.curId;
         if (blockId in this.trace.blocks) {
@@ -88,11 +94,21 @@ class TraceLogger {
         const clones = target.sprite.clones.map(t => t.drawableID.toString());
         const cloneSet = new Set(clones);
         const skinId = target.sprite.costumes.map(c => c.md5)[target.currentCostume];
-        console.log("trace", this.trace);
+        // console.log("trace", this.trace);
+        if (!this.trace.stage) {
+            const stage = vm.runtime.getTargetForStage();
+            if (stage) {
+                // console.log("stage: ", stage);
+                const stageSkinId = stage.sprite.costumes.map(c => c.md5)[stage.currentCostume];
+                this.trace.stage = {drawableId: stage.sprite.clones[0].toString(), skinId: stageSkinId}
+            }
+        }
 
         for (const d of target.renderer._allDrawables) {
             if (!d) continue;
             const drawableId = d._id.toString();
+            if (!this.trace.drawables[drawableId]) {this.trace.drawables[drawableId] = {}}
+            this.trace.drawables[drawableId].endIdx = this.curId;
             if (! (cloneSet.has(drawableId))) continue;
             // it is incomplete to only check the current target's clones. But this is the
             // most time-efficient way.
@@ -103,9 +119,8 @@ class TraceLogger {
                 this.fillAttribute(attribute, d, obj);
             }
 
-            if (!(drawableId in this.trace.drawables)) {
+            if (!this.trace.drawables[drawableId][TraceLogger.attributeLst[0]]) {
                 // if it's not in the trace yet, add it in;
-                this.trace.drawables[drawableId] = {};
                 for (const attribute of TraceLogger.attributeLst) {
                     this.trace.drawables[drawableId][attribute] = {
                         data: [obj[attribute]], id: [this.curId]

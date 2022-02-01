@@ -5,7 +5,7 @@ export const selectedProjectSlice = createSlice({
     name: 'selectedProjectSlice',
     initialState: {
         data: {
-            selected: "02-Boat Race",
+            selected: "Panda Eats Bamboos",
         }
     },
     reducers: {

@@ -46,7 +46,7 @@ const Player = (props) => {
         const trace = scratch.current.traceLogger.trace;
         // const stride = Math.floor(trace.endIdx / 100);
         dispatch(setTrace({...trace}));
-        dispatch(setStride(Math.floor(trace.endIdx / 100)));
+        dispatch(setStride(Math.ceil(trace.endIdx / 100)));
         // ReplayerAPI.postTrace(selectedProject, trace, stride).then(
         //     res => {
         //         dispatch(setTrace(res.data));
