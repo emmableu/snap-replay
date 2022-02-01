@@ -65,16 +65,20 @@ class TraceLogger {
         //     console.log("block.opcode: ", block.opcode);
         // }
         if (!block || this.ignoreOpcodes.has(block.opcode)) return;
-        console.log("block.opcode: ", block.opcode);
+        // console.log("block.opcode: ", block.opcode);
 
         this.curId += 1;
         this.trace.endIdx = this.curId;
-        if (blockId in this.trace.blocks) {
-            this.trace.blocks[blockId].push(this.curId);
+
+        const blocksData = this.trace.blocks.data;
+
+        if (
+            blocksData.length === 0 ||
+            blockId !== blocksData[blocksData.length - 1]) {
+            blocksData.push(blockId);
+            this.trace.blocks.id.push(this.curId);
         }
-        else {
-            this.trace.blocks[blockId] = [this.curId];
-        }
+
         let keysDown;
         let keysDownList = target.runtime.ioDevices.keyboard._keysPressed;
         keysDownList = keysDownList.map(x => Util.scratchKeyToKeyString(x));
@@ -187,7 +191,7 @@ class TraceLogger {
     clearTrace () {
         this.trace =  {
             drawables: {},
-            blocks: {},
+            blocks: {data: [], id: []},
             keysDown: {data: [], id: []},
             endIdx: -1
         };

@@ -54,6 +54,7 @@ class ScratchStage extends EventEmitter {
     }
 
      stop () {
+        console.log("trace: ", this.traceLogger.trace);
         clearInterval(this.vm.runtime._steppingInterval);
         this.disableInput();
         this.traceLogger.restoreClasses({Thread});

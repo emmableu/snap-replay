@@ -116,6 +116,10 @@ const Frame = () => {
     };
 
     const handleMouseUp = (e, newValue) => {
+        const startIdx = Bisect.ub(trace.blocks.id, newValue[0]);
+        const endIdx = Bisect.ub(trace.blocks.id, newValue[1]);
+        const traceBlocks = trace.blocks.data.slice(startIdx, endIdx);
+        window.ide.highlightRunningCode(traceBlocks);
         replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
     }
 
