@@ -1,10 +1,10 @@
 import React from "react";
-import Canvas from "./components/Canvas.jsx";
+import Snap from "./components/Snap.jsx";
 import Frame from "./components/Frame.jsx";
 import ResizablePanels from "./util/ResizablePanels.jsx";
 import EditStepper from "./components/EditStepper";
 import Player from "./components/Player";
-import SwipeableEdgeDrawer from "./components/Notebook/NotebookPage";
+import NotebookContainer from "./components/Notebook/NotebookContainer";
 
 function App() {
   return (
@@ -15,9 +15,9 @@ function App() {
                     // step1={<Player/>}
                     // step2={<Frame/>}
                 />
-                <Canvas />
+                <Snap />
             </ResizablePanels>
-            <SwipeableEdgeDrawer/>
+            <NotebookContainer/>
         </div>
   );
 }

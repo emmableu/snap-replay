@@ -1,105 +1,134 @@
-import * as React from 'react';
-import { Global } from '@emotion/react';
-import { styled } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { grey } from '@mui/material/colors';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
-import Typography from '@mui/material/Typography';
-import Drawer from '@mui/material/Drawer';
-import {IconButton} from "@mui/material";
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import React from 'react';
+import {makeStyles} from '@mui/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {Drawer, Box, Button, CssBaseline, Grid} from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+// import NotebookTitleBar from "./NotebookTitleBar";
+// import ProjectMenu from "./ProjectMenu";
+import globalConfig from "../../globalConfig";
+// import ProjectTable from "./ProjectTable";
+// import NewProjectButton from "./DashboardAddNewProject/NewProjectButton";
+import {useDispatch, useSelector} from "react-redux";
+import Cookies from "js-cookie";
+import {Add} from "@mui/icons-material";
+import NotebookTitleBar from "./NotebookTitleBar";
+import {ExampleMenu} from "./ExampleMenu";
+import NotebookSnap from "./NotebookSnap";
 
-const drawerBleeding = 56;
+const drawerWidth = globalConfig.projectDrawerWidth;
 
-const Root = styled('div')(({ theme }) => ({
-    height: '100%',
-    backgroundColor:
-        theme.palette.mode === 'light'
-            ? grey[100]
-            : theme.palette.background.default,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        height: "100%"
+    },
+    appBar: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+        padding: "0px 20px",
+        height: "100%",
+        borderRight: "1px solid #f0f0f0"
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    // necessary for content to be below app bar
+    toolbar: {
+        height: globalConfig.toolBarHeight
+    },
+    // content: {
+    //     flexGrow: 1,
+    //     backgroundColor: "#fafafa",
+    //     padding: 10,
+    // },
+    goalPad: {
+        width: globalConfig.responsiveSizeData.actorDrawerWidth,
+        flex: `0 0 ${globalConfig.responsiveSizeData.actorDrawerWidth}px`,
+        borderColor: "black",
+        backgroundColor: "red",
+    },
+    addButtonContainer: {
+        "& span": {
+            textTransform: "none",
+        },
+        width: "100%",
+        padding: "10px 0",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    projectTableGrid: {
+        padding: "30px 0 0 0"
+    }
 }));
+const DashboardPage = () => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const userId = Cookies.get('userId');
+    const projectList = useSelector(state =>
+    {
+        // // globalLog("state.dashboard.value: ", state.dashboard.value);
+        // return (state.dashboard.value===null? null: state.dashboard.value.projectList)
+        return []
+    });
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
-}));
+    React.useEffect(() =>
+    {
+        if (userId !== undefined) {
+            // dispatch(fetchDashboardByUserID(userId));
+        }
+    }, []);
 
-const PullerButton = styled(IconButton)(({ theme }) => ({
-    // width: 30,
-    // height: 6,
-    backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
-    // borderRadius: 3,
-    position: 'absolute',
-    top: 8,
-    left: 'calc(50% - 15px)',
-}));
-
-function SwipeableEdgeDrawer() {
-    const [open, setOpen] = React.useState(false);
-
-    const toggleDrawer = (newOpen) => () => {
-        setOpen(newOpen);
-    };
-
-    // This is used only for the example
 
     return (
-        <Root>
-            <CssBaseline />
-            <Global
-                styles={{
-                    '.MuiDrawer-root > .MuiPaper-root': {
-                        height: `calc(90% - ${drawerBleeding}px)`,
-                        overflow: 'visible',
-                    },
-                }}
-            />
-            <Drawer
-                anchor="bottom"
-                open={open}
-                onClose={toggleDrawer(false)}
-                onOpen={toggleDrawer(true)}
-                swipeAreaWidth={drawerBleeding}
-                disableSwipeToOpen={false}
-                ModalProps={{
-                    keepMounted: true,
-                }}
-            >
-                <StyledBox
-                    sx={{
-                        position: 'absolute',
-                        top: -drawerBleeding,
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                        visibility: 'visible',
-                        right: 0,
-                        left: 0,
-                    }}
+        <ThemeProvider theme={globalConfig.dashboardTheme()}>
+            <div className={classes.root}>
+                <CssBaseline />
+                <div
+                    className={classes.drawer}
                 >
-                    {/*<Puller />*/}
-                    <PullerButton onClick={toggleDrawer(!open)}>
-                        {open ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
-                    </PullerButton>
-                    <Typography sx={{ p: 2, color: 'text.secondary' }}>
-                        My Examples
-                    </Typography>
-                </StyledBox>
-                <StyledBox
-                    sx={{
-                        px: 2,
-                        pb: 2,
-                        height: '100%',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Skeleton variant="rectangular" height="100%" />
-                </StyledBox>
-            </Drawer>
-        </Root>
+                    <div className={classes.toolbar} />
+                    <Divider />
+                    <div className={classes.addButtonContainer}>
+                        <Button
+                            onClick={e => e.preventDefault()}
+                            startIcon={<Add/>}
+                            color="secondary"
+                            variant="contained"
+                        > New Example
+                        </Button>
+                    </div>
+                    <ExampleMenu/>
+                    {/*<ProjectMenu/>*/}
+                </div>
+
+                <div style={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
+                    <NotebookTitleBar userId={userId}/>
+                    <div style={{display: "flex", flexDirection: "row",
+                                width: `100%`,
+                                height: `calc(100% - ${globalConfig.toolBarHeight}px`}}>
+                        <Paper className={classes.goalPad}/>
+                        <div style={{display: "flex", flexDirection: "row",
+                            width: `calc(100% - ${globalConfig.responsiveSizeData.actorDrawerWidth}px)`,
+                            height: "100%"}}>
+                            <NotebookSnap/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ThemeProvider>
     );
 }
 
 
-export default SwipeableEdgeDrawer;
+export default DashboardPage;
