@@ -24,12 +24,15 @@ export default function EditStepper(props) {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        setNextEnabled(false);
     };
 
 
     return (
         <>
-            <ProjectSelector/>
+            <ProjectSelector
+                setActiveStep={setActiveStep}
+                setNextEnabled={setNextEnabled}/>
         <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
                 {steps.map((label, index) => {

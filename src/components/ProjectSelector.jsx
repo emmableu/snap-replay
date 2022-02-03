@@ -7,16 +7,25 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 
-const ProjectSelector = () => {
+const ProjectSelector = (props) => {
+    const {setActiveStep, setNextEnabled} = props;
     const dispatch = useDispatch();
-    const projectSelections = [
-        "Panda Eats Bamboos",
-        "Shoot a Star",
-        "Skiing Cat",
-    ]
+    // const projectSelections = [
+    //     "Panda Eats Bamboos",
+    //     "Shoot a Star",
+    //     "Skiing Cat",
+    // ]
+    const projectSelections = {
+        "Panda Eats Bamboos": "panda",
+        "Shoot a Star": "shoot",
+        "Skiing Cat": "skiing",
+    };
+
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
 
     function handleChangeSelect(event) {
+        setActiveStep(0);
+        setNextEnabled(false);
         dispatch(setSelectedProject(event.target.value));
     }
 
@@ -33,8 +42,8 @@ const ProjectSelector = () => {
                 <MenuItem value="">
                     <em>None</em>
                 </MenuItem>
-                {projectSelections.map((name) => (
-                    <MenuItem value={name}>{name}</MenuItem>
+                {Object.entries(projectSelections).map(([name, val]) => (
+                    <MenuItem value={val}>{name}</MenuItem>
                 ))}
             </Select>
             <FormHelperText>Select an example project</FormHelperText>

@@ -42,7 +42,7 @@ export class Replayer {
             let drawableObj = {}
             for (const attribute of TraceLogger.attributeLst) {
                 if (!obj[attribute]) break;
-                console.log(attribute);
+                // console.log(attribute);
                 const idx = Bisect.ub(obj[attribute].id, frameId);
                 if (idx === -1) break;
                 drawableObj[attribute] = obj[attribute].data[idx];

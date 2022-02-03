@@ -4,6 +4,7 @@ import Frame from "./components/Frame.jsx";
 import ResizablePanels from "./util/ResizablePanels.jsx";
 import EditStepper from "./components/EditStepper";
 import Player from "./components/Player";
+import SwipeableEdgeDrawer from "./components/Notebook/NotebookPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
                 />
                 <Canvas />
             </ResizablePanels>
+            <SwipeableEdgeDrawer/>
         </div>
   );
 }

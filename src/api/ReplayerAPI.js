@@ -11,13 +11,14 @@ class ReplayerAPI {
     //     return response;
     // }
 
-    static async postTrace (projectName, trace, stride) {
-        // const response = await axiosSpring({
-        //     method: 'post',
-        //     url: `/post-trace/${userId}/${projectName}/${stride}`,
-        //     data: trace
-        // })
-        // return response;
+    static async postTrace (projectName, trace) {
+        const userId = "wwang33";
+        const response = await axiosSpring({
+            method: 'post',
+            url: `/post-trace/${userId}/${projectName}`,
+            data: trace
+        })
+        return response;
     }
 
     static async getSB3 (projectName) {
@@ -37,8 +38,8 @@ class ReplayerAPI {
             data: {
                 projectName: projectName,
                 isOriginal: isOriginal,
-                start: start * stride,
-                end: end * stride,
+                start: Math.floor(start * stride),
+                end: Math.floor(end * stride),
             }
         })
         // console.log("post script response: ", response.data);
@@ -53,7 +54,7 @@ class ReplayerAPI {
     }
 
     static async postSnapXML (projectName, projectJson, type) {
-
+        console.log("postSnapXML");
         const response = await axiosExpress({
             method: 'post',
             url: `/post-snap-xml/${projectName}`,
@@ -66,11 +67,10 @@ class ReplayerAPI {
         // window.ide.slice = response.data.slice;
         window.ide.code = response.data;
 
-
-        if (type==="asset" || type === "original") {
+        if (type==="asset") {
             window.ide.interpretReqAnchors(response.data.full, false);
         }
-        else if (type==="script") {
+        else if (type==="script" || type === "original") {
             window.ide.interpretReqAnchors(response.data.full, true);
         }
         // else if (type === "sprite")

@@ -12,7 +12,7 @@ class Bisect {
                 r = mid
             }
         }
-        console.log("target: ", nums, target, l + 1);
+        // console.log("target: ", nums, target, l + 1);
         return l + 1;
     }
     static ub = (nums, target) => {
@@ -28,7 +28,7 @@ class Bisect {
                 r = mid
             }
         }
-        console.log("target: ", nums, target, r - 1);
+        // console.log("target: ", nums, target, r - 1);
         return r - 1;
     }
 }
