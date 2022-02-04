@@ -34,7 +34,7 @@ const Snap = (props) => {
         world.isDevMode = true;
         world.worldCanvas.focus();
         world.initLayout(width, height);
-        const ide = new IDE_Morph();
+        const ide = new IDE_Morph(true);
         ide.openIn(world);
         ide.fixLayout();
         window.ide = ide;

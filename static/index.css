@@ -53,14 +53,9 @@ code {
 }
 
 
-.panel-container {
-  display: flex;
-  height: 100vh;
-}
-
 .panel {
   background: white;
-  border: 1px solid #A7A7A7;
+  border: 1px solid #c9c9c9;
 }
 
 

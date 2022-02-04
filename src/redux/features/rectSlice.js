@@ -5,7 +5,8 @@ export const rectSlice = createSlice({
     name: 'rectSlice',
     initialState: {
         data: {
-            leftPanelSize: 400,
+            playerPanelWidth: 400,
+            goalPadWidth: 250,
         },
     },
     reducers: {

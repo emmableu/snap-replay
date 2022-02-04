@@ -9,7 +9,7 @@ import {setStride, setTrace} from "../redux/features/traceSlice";
 
 const Player = (props) => {
     const {nextEnabled, setNextEnabled} = props;
-    const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
+    const playerPanelWidth = useSelector(state => state.rect.data.playerPanelWidth);
     const playerRef = React.useRef();
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
     const scratch = React.useRef();
@@ -23,7 +23,7 @@ const Player = (props) => {
             scratch.current = new ScratchStage(playerRef.current);
             window.scratch = scratch.current;
         }
-        const width = leftPanelSize / window.devicePixelRatio;
+        const width = playerPanelWidth / window.devicePixelRatio;
         const height = width * 0.75;
         scratch.current.vm.renderer.resize(width, height);
         const sb3 = await ReplayerAPI.getSB3(selectedProject);

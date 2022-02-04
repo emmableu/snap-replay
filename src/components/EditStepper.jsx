@@ -14,7 +14,7 @@ import Player from "./Player";
 const steps = ['Play the program', 'View your trace'];
 
 export default function EditStepper(props) {
-    const leftPanelSize = useSelector(state => state.rect.data.leftPanelSize);
+    const playerPanelWidth = useSelector(state => state.rect.data.playerPanelWidth);
     const [activeStep, setActiveStep] = React.useState(0);
     const [nextEnabled, setNextEnabled] = React.useState(false);
 

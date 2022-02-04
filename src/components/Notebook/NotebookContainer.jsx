@@ -91,7 +91,7 @@ function NotebookContainer() {
                 </StyledBox>
                 <StyledBox
                     sx={{
-                        height: '100%',
+                        height: `100%`,
                         overflow: 'auto',
                         backgroundColor: "#fafafa",
                     }}

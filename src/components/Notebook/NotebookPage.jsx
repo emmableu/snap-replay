@@ -21,6 +21,10 @@ import {Add} from "@mui/icons-material";
 import NotebookTitleBar from "./NotebookTitleBar";
 import {ExampleMenu} from "./ExampleMenu";
 import NotebookSnap from "./NotebookSnap";
+import ResizablePanels from "../../util/ResizablePanels";
+import EditStepper from "../EditStepper";
+import Snap from "../Snap";
+import GoalPad from "./GoalPad";
 
 const drawerWidth = globalConfig.projectDrawerWidth;
 
@@ -53,12 +57,13 @@ const useStyles = makeStyles((theme) => ({
     //     padding: 10,
     // },
     goalPad: {
-        width: globalConfig.responsiveSizeData.actorDrawerWidth,
-        flex: `0 0 ${globalConfig.responsiveSizeData.actorDrawerWidth}px`,
+        // width: globalConfig.responsiveSizeData.actorDrawerWidth,
+        // flex: `0 0 ${globalConfig.responsiveSizeData.actorDrawerWidth}px`,
         borderColor: "black",
         backgroundColor: "red",
     },
     addButtonContainer: {
+        display: "flex",
         "& span": {
             textTransform: "none",
         },
@@ -72,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 const DashboardPage = () => {
+    const goalPadWidth = useSelector(state => {return state.rect.data.goalPadWidth});
     const classes = useStyles();
     const dispatch = useDispatch();
     const userId = Cookies.get('userId');
@@ -112,19 +118,27 @@ const DashboardPage = () => {
                     {/*<ProjectMenu/>*/}
                 </div>
 
-                <div style={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
+                <div style={{flexGrow: 1, display: "flex", flexDirection: "column", height: "100%"}}>
                     <NotebookTitleBar userId={userId}/>
-                    <div style={{display: "flex", flexDirection: "row",
+                    <div style={{
                                 width: `100%`,
                                 height: `calc(100% - ${globalConfig.toolBarHeight}px`}}>
-                        <Paper className={classes.goalPad}/>
-                        <div style={{display: "flex", flexDirection: "row",
-                            width: `calc(100% - ${globalConfig.responsiveSizeData.actorDrawerWidth}px)`,
-                            height: "100%"}}>
+                        <ResizablePanels
+                            leftSize={goalPadWidth}
+                            draggingType="goalPadWidth"
+                            panelHeight={`calc(95vh - ${globalConfig.drawerBleeding}px - ${globalConfig.toolBarHeight}px`}
+                        >
+                            <GoalPad/>
+                            {/*<div style={{display: "flex", flexDirection: "row",*/}
+                            {/*    width: `calc(100% - ${globalConfig.responsiveSizeData.actorDrawerWidth}px)`,*/}
+                            {/*    height: "100%"}}>*/}
                             <NotebookSnap/>
-                        </div>
+                            {/*</div>*/}
+                        </ResizablePanels>
+
                     </div>
                 </div>
+                {/*</div>*/}
             </div>
         </ThemeProvider>
     );
