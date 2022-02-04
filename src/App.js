@@ -7,6 +7,7 @@ import Player from "./components/Player";
 import NotebookContainer from "./components/Notebook/NotebookContainer";
 import {useSelector} from "react-redux";
 import globalConfig from "./globalConfig";
+import SaveToNotebookButton from "./components/SaveToNotebookButton";
 
 function App() {
     const playerPanelWidth = useSelector(state => {return state.rect.data.playerPanelWidth});
@@ -23,6 +24,7 @@ function App() {
                     <Snap />
                 </ResizablePanels>
             }
+            <SaveToNotebookButton/>
             <NotebookContainer/>
         </div>
   );

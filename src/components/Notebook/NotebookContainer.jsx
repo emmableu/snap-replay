@@ -81,7 +81,6 @@ function NotebookContainer() {
                         backgroundColor: "#fafafa",
                     }}
                 >
-                    {/*<Puller />*/}
                     <PullerButton onClick={toggleDrawer(!open)}>
                         {open ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
                     </PullerButton>

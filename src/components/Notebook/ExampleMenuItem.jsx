@@ -3,12 +3,12 @@ import globalConfig from "../../globalConfig";
 import React from "react";
 import ExampleActionDropdown from "./ExampleActionDropdown";
 import {useDispatch, useSelector} from "react-redux";
+import {setSelectedExampleId} from "../../redux/features/exampleCollectionSlice";
 
 const ExampleMenuItem = (props) => {
     const {item} = props;
-    const selectedExample = "abc";
     const dispatch = useDispatch();
-    // const selectedExample = useSelector(state => state.project.value.selectedId.exampleId);
+    const selectedExample = useSelector(state => state.exampleCollection.selectedId);
     const [hovering, setHovering] = React.useState(false)
 
     const toggleHover = () => {
@@ -20,7 +20,7 @@ const ExampleMenuItem = (props) => {
             variant="outlined"
             elevation={0}
             onClick={(e) => {
-                // dispatch(setSelectedExampleId(item._id));
+                dispatch(setSelectedExampleId({_id: item._id}));
             }}
             onMouseEnter={toggleHover}
             onMouseLeave={toggleHover}
