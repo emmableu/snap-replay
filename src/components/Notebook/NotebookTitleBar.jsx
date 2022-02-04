@@ -26,12 +26,10 @@ const useStyles = makeStyles((theme) => ({
 export const NotebookTitleBar = (props) => {
     const {userId} = props;
     const classes = useStyles();
-    // // // globalLog("Cookies.get(userid", Cookies.get("userId"));
     // const userId = useSelector(state =>
     //     state.dashboard.value===null? null:state.dashboard.value.userId);
     //
     // React.useEffect(() => {
-    //     // // globalLog("state.dashboard.value: ", userId);
     // }, [userId])
 
     return (
@@ -45,7 +43,7 @@ export const NotebookTitleBar = (props) => {
                           alt="notebook" src="/static/notebook.png" />
 
                 <Typography variant="subtitle" className={classes.title}>
-                    {' '} My Examples
+                    {' '} My Feature Prototypes
                 </Typography>
                 <PersonOutlineOutlinedIcon/>
                 {userId}

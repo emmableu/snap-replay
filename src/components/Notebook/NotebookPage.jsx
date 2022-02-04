@@ -83,7 +83,6 @@ const DashboardPage = () => {
     const userId = Cookies.get('userId');
     const projectList = useSelector(state =>
     {
-        // // globalLog("state.dashboard.value: ", state.dashboard.value);
         // return (state.dashboard.value===null? null: state.dashboard.value.projectList)
         return []
     });
@@ -123,19 +122,17 @@ const DashboardPage = () => {
                     <div style={{
                                 width: `100%`,
                                 height: `calc(100% - ${globalConfig.toolBarHeight}px`}}>
-                        <ResizablePanels
-                            leftSize={goalPadWidth}
-                            draggingType="goalPadWidth"
-                            panelHeight={`calc(95vh - ${globalConfig.drawerBleeding}px - ${globalConfig.toolBarHeight}px`}
-                        >
-                            <GoalPad/>
-                            {/*<div style={{display: "flex", flexDirection: "row",*/}
-                            {/*    width: `calc(100% - ${globalConfig.responsiveSizeData.actorDrawerWidth}px)`,*/}
-                            {/*    height: "100%"}}>*/}
-                            <NotebookSnap/>
-                            {/*</div>*/}
-                        </ResizablePanels>
-
+                        {globalConfig.simplifiedInterfaceFor110?
+                            <NotebookSnap/> :
+                            <ResizablePanels
+                                leftSize={goalPadWidth}
+                                draggingType="goalPadWidth"
+                                panelHeight={`calc(95vh - ${globalConfig.drawerBleeding}px - ${globalConfig.toolBarHeight}px`}
+                            >
+                                <GoalPad/>
+                                <NotebookSnap/>
+                            </ResizablePanels>
+                        }
                     </div>
                 </div>
                 {/*</div>*/}

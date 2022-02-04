@@ -6,19 +6,23 @@ import EditStepper from "./components/EditStepper";
 import Player from "./components/Player";
 import NotebookContainer from "./components/Notebook/NotebookContainer";
 import {useSelector} from "react-redux";
+import globalConfig from "./globalConfig";
 
 function App() {
     const playerPanelWidth = useSelector(state => {return state.rect.data.playerPanelWidth});
     return (
         <div className="App" style={{width: "100%", height: "100%"}}>
-            <ResizablePanels
+            {globalConfig.simplifiedInterfaceFor110 ?
+                <Snap/> :
+                <ResizablePanels
                     leftSize={playerPanelWidth}
                     draggingType={"playerPanelWidth"}
                     panelHeight={"100vh"}
-            >
-                <EditStepper/>
-                <Snap />
-            </ResizablePanels>
+                >
+                    <EditStepper/>
+                    <Snap />
+                </ResizablePanels>
+            }
             <NotebookContainer/>
         </div>
   );
