@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
 
@@ -38,7 +39,7 @@ module.exports = {
                 test: /(\.jsx|\.js)$/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
-                options: { presets: ['@babel/env','@babel/preset-react'] },
+                options: { presets: ['@babel/preset-env','@babel/preset-react'] },
             },
             {
                 test: /\.css$/,
@@ -60,6 +61,11 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: __dirname + "/index.html"//new 一个这个插件的实例，并传入相关的参数
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'static', to: 'static'}
+            ]
         }),
         // Work around for Buffer is undefined:
         // https://github.com/webpack/changelog-v5/issues/10

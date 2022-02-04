@@ -36,6 +36,7 @@ const Snap = (props) => {
         world.initLayout(width, height);
         const ide = new IDE_Morph(true);
         ide.openIn(world);
+        ide.setBlocksScale(1.1);
         ide.fixLayout();
         window.ide = ide;
         loop();

@@ -34,6 +34,7 @@ const NotebookSnap = (props) => {
         world.initLayout(width, height);
         const ide = new IDE_Morph();
         ide.openIn(world);
+        ide.setBlocksScale(1.1);
         ide.fixLayout();
         window.notebookIde = ide;
         loop();
