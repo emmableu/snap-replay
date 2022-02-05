@@ -1,9 +1,11 @@
 // First we need to import axios.js
 import axios from 'axios';
 import 'regenerator-runtime/runtime';
+import globalConfigIgnore from "../../globalConfig.ignore";
+
 const instance = axios.create({
 // .. where we make our configurations
-    baseURL: "http://localhost:9090/"
+    baseURL: globalConfigIgnore.axiosExpressBaseURL
 });
 
 const handleRequest = async (request) => {

@@ -1,6 +1,13 @@
 import {createTheme} from "@mui/material";
+import globalConfigIgnore from "../globalConfig.ignore";
 
-const simplifiedInterfaceFor110 = true;
+let simplifiedInterfaceFor110;
+if (globalConfigIgnore) {
+    simplifiedInterfaceFor110 = globalConfigIgnore.simplifiedInterfaceFor110;
+}
+else {
+    simplifiedInterfaceFor110 = true;
+}
 
 const globalConfig = {
     simplifiedInterfaceFor110,
