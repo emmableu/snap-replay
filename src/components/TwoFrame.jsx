@@ -82,15 +82,18 @@ const TwoFrame = ( ) => {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 100 - minDistance);
                 setTimeRange([clamped, clamped + minDistance]);
-                replayer1.current.loadFrame(newValue[0] * stride);
             } else {
                 const clamped = Math.max(newValue[1], minDistance);
                 setTimeRange([clamped - minDistance, clamped]);
-                replayer2.current.loadFrame(newValue[1] * stride);
             }
         }
         else {
             setTimeRange(newValue);
+        }
+        if (activeThumb === 0) {
+            replayer1.current.loadFrame(timeRange[0] * stride);
+        } else {
+            replayer2.current.loadFrame(timeRange[1] * stride);
         }
     };
 
