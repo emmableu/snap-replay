@@ -1,5 +1,5 @@
 const globalConfigIgnore = {
-     simplifiedInterfaceFor110: true,
+     simplifiedInterfaceFor110: false,
      axiosExpressBaseURL: "http://localhost:9090/",
      axiosSpringBaseURL: "http://localhost:8082/",
 }

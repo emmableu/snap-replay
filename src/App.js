@@ -8,24 +8,35 @@ import NotebookContainer from "./components/Notebook/NotebookContainer";
 import {useSelector} from "react-redux";
 import globalConfig from "./globalConfig";
 import SaveToNotebookButton from "./components/SaveToNotebookButton";
+import TitleBar from "./components/TitleBar";
+import LoginPage from "./components/LoginPage";
 
 function App() {
-    const playerPanelWidth = useSelector(state => {return state.rect.data.playerPanelWidth});
+    const userId = useSelector(s => s.userId.data);
+    const playerPanelContainerWidth = useSelector(state => {return state.rect.data.playerPanelContainerWidth});
     return (
         <div className="App" style={{width: "100%", height: "100%"}}>
-            {globalConfig.simplifiedInterfaceFor110 ?
-                <Snap/> :
-                <ResizablePanels
-                    leftSize={playerPanelWidth}
-                    draggingType={"playerPanelWidth"}
-                    panelHeight={"100vh"}
-                >
-                    <EditStepper/>
-                    <Snap />
-                </ResizablePanels>
-            }
-            <SaveToNotebookButton/>
-            <NotebookContainer/>
+            {userId ?
+                <>
+                {globalConfig.simplifiedInterfaceFor110 ?
+                        <Snap/> :
+                    <>
+                        <TitleBar/>
+                        <ResizablePanels
+                            leftSize={playerPanelContainerWidth}
+                            draggingType={"playerPanelContainerWidth"}
+                            panelHeight={"100vh"}
+                        >
+                            <EditStepper/>
+                            <Snap />
+                        </ResizablePanels>
+                    </>
+                }
+                <SaveToNotebookButton/>
+                <NotebookContainer/>
+                </>
+                : <LoginPage/>}
+
         </div>
   );
 }

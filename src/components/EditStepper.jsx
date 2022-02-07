@@ -10,11 +10,12 @@ import {useSelector} from "react-redux";
 import ProjectSelector from "./ProjectSelector";
 import Frame from "./Frame";
 import Player from "./Player";
+import TwoFrame from "./TwoFrame";
 
 const steps = ['Play the program', 'View your trace'];
 
 export default function EditStepper(props) {
-    const playerPanelWidth = useSelector(state => state.rect.data.playerPanelWidth);
+    const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);
     const [activeStep, setActiveStep] = React.useState(0);
     const [nextEnabled, setNextEnabled] = React.useState(false);
 
@@ -47,7 +48,7 @@ export default function EditStepper(props) {
             </Stepper>
             <React.Fragment>
                 <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-                {activeStep === 1 ? <Frame/> : <Player
+                {activeStep === 1 ? <TwoFrame/> : <Player
                     nextEnabled={nextEnabled}
                     setNextEnabled={setNextEnabled}
                 />}

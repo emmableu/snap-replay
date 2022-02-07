@@ -13,6 +13,21 @@ const globalConfig = {
     simplifiedInterfaceFor110,
     drawerBleeding: 48,
     toolBarHeight: 56,
+    oneSideOuterPadding: 25,  //shown as A in the below picture
+    oneSideInnerPadding: 10,  //shown as B in the below picture
+    /*
+
+|                                                       |
+|     ----------------            ----------------      |
+|<-A->|               |<-B-> <-B->|               |<-A->|
+|     |               |           |               |     |
+|     |               |           |               |     |
+|    -----------------            -----------------     |
+| <---  state.rect.data.playerPanelContainerWidth ----> |
+    */
+
+
+
     projectDrawerWidth: simplifiedInterfaceFor110 ? 150 : 250,
     dashboardTheme: () => createTheme({
         palette: {

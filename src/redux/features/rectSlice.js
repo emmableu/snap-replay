@@ -1,12 +1,15 @@
 import { createSlice} from '@reduxjs/toolkit'
 
+const playerPanelWidth = 500;
+const oneSidePadding = 25;
+
 
 export const rectSlice = createSlice({
     name: 'rectSlice',
     initialState: {
         data: {
-            playerPanelWidth: 400,
-            goalPadWidth: 250,
+            playerPanelContainerWidth: 500,
+
         },
     },
     reducers: {

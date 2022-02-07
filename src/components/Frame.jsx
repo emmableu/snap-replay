@@ -20,7 +20,7 @@ import Bisect from "../util/Bisect";
 const Frame = () => {
     const frameRef = React.useRef(null);
     const frameParentRef = React.useRef(null);
-    const playerPanelWidth = useSelector(state => state.rect.data.playerPanelWidth);
+    const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);
     const trace = useSelector(state => state.trace.data);
     const stride = useSelector(state => state.trace.stride);
     const [sliderSize, setSliderSize] = React.useState(0);
@@ -74,7 +74,7 @@ const Frame = () => {
             requestAnimationFrame(drawStep);
         };
         // size somehow gets multiplied by 4 on mac retina displays
-        const width = playerPanelWidth / window.devicePixelRatio;
+        const width = playerPanelContainerWidth / window.devicePixelRatio;
         const height = width * 0.75;
         console.log("width, height: ", width, height);
         renderer.current.resize(width, height);
@@ -86,11 +86,11 @@ const Frame = () => {
 
     // React.useEffect( () => {
     //     if (!renderer.current) return;
-    //     const width = playerPanelWidth / window.devicePixelRatio;
+    //     const width = playerPanelContainerWidth / window.devicePixelRatio;
     //     const height = width * 0.75;
     //     renderer.current.resize(width, height);
     //     renderer.current.draw();
-    // }, [playerPanelWidth])
+    // }, [playerPanelContainerWidth])
 
 
 
@@ -136,7 +136,7 @@ const Frame = () => {
     }
 
     return (
-        <div style={{width: playerPanelWidth, height: playerPanelWidth * 3/4 + 300}} ref={frameParentRef}>
+        <div style={{width: playerPanelContainerWidth, height: playerPanelContainerWidth * 3/4 + 300}} ref={frameParentRef}>
 
             <div style={{backgroundColor: "grey", border: "1px solid grey"}}>
             {/*<div>*/}

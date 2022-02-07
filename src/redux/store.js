@@ -3,13 +3,15 @@ import rectSlice from "./features/rectSlice.js";
 import traceSlice from "./features/traceSlice.js";
 import selectedProjectSlice from "./features/selectedProjectSlice";
 import exampleCollectionSlice from "./features/exampleCollectionSlice";
+import userIdReducer from "./features/userIdSlice";
 
 const store = configureStore({
    reducer: {
        rect: rectSlice,
        selectedProject: selectedProjectSlice,
        trace: traceSlice,
-       exampleCollection: exampleCollectionSlice
+       exampleCollection: exampleCollectionSlice,
+       userId: userIdReducer
    }
 });
 
