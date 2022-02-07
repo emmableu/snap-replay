@@ -30,9 +30,9 @@ const TwoFrame = ( ) => {
     const trace = useSelector(state => state.trace.data);
     const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);
     const calcFrameWidth = (playerPanelContainerWidth) => (
-      playerPanelContainerWidth / 2
+      (playerPanelContainerWidth / 2
         - globalConfig.oneSideOuterPadding
-        - globalConfig.oneSideInnerPadding
+        - globalConfig.oneSideInnerPadding) / window.devicePixelRatio
     );
     const [frameWidth, setFrameWidth] = React.useState(calcFrameWidth(playerPanelContainerWidth));
     const minDistance = 1;
@@ -42,7 +42,17 @@ const TwoFrame = ( ) => {
 
 
     React.useEffect(() => {
-        setFrameWidth(calcFrameWidth(playerPanelContainerWidth));
+        const width = calcFrameWidth(playerPanelContainerWidth)
+        setFrameWidth(width);
+        const height = width * 0.75;
+        try {
+            for (const renderer of [renderer1, renderer2]) {
+                renderer.current.resize(width, height);
+            }
+        }
+        catch (e) {
+            console.error(e);
+        }
     }, [playerPanelContainerWidth])
 
     React.useEffect(  () => {
@@ -65,7 +75,7 @@ const TwoFrame = ( ) => {
             };
 
             // size somehow gets multiplied by 4 on mac retina displays
-            const width = frameWidth / window.devicePixelRatio;
+            const width = frameWidth ;
             const height = width * 0.75;
             // console.log("width, height: ", width, height);
             renderer.current.resize(width, height);
@@ -86,19 +96,21 @@ const TwoFrame = ( ) => {
                 const clamped = Math.max(newValue[1], minDistance);
                 setTimeRange([clamped - minDistance, clamped]);
             }
+            replayer1.current.loadFrame(timeRange[0] * stride);
+            replayer2.current.loadFrame(timeRange[1] * stride);
         }
         else {
             setTimeRange(newValue);
-        }
-        if (activeThumb === 0) {
-            replayer1.current.loadFrame(timeRange[0] * stride);
-        } else {
-            replayer2.current.loadFrame(timeRange[1] * stride);
+            if (activeThumb === 0) {
+                replayer1.current.loadFrame(timeRange[0] * stride);
+            } else {
+                replayer2.current.loadFrame(timeRange[1] * stride);
+            }
         }
     };
 
     const handleMouseUp = (e, newValue) => {
-        const traceBlocks =  new Set(trace.blocks.slice(newValue[0], newValue[1]));
+        const traceBlocks =  new Set(trace.blocks.slice(newValue[0] * stride, newValue[1] * stride));
         window.ide.traceBlocks = traceBlocks;
         if (!originalMode) {
             replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
@@ -124,21 +136,22 @@ const TwoFrame = ( ) => {
         }
     };
 
+
     return (
-        <div style={{width: playerPanelContainerWidth, height: playerPanelContainerWidth * 3/4 + 300}}>
+        <div>
 
             <div style={{
                 display: "flex",
 
             }}>
-            <div style={{backgroundColor: "grey", border: "1px solid grey"}}>
+            <div style={{backgroundColor:  "#c9c9c9", border: "1px solid #c9c9c9"}}>
                 {/*<div>*/}
                 <canvas
                     ref={frameRef1}
                 >
                 </canvas>
             </div>
-            <div style={{backgroundColor: "grey", border: "1px solid grey"}}>
+            <div style={{backgroundColor: "#c9c9c9", border: "1px solid #c9c9c9"}}>
                 {/*<div>*/}
                 <canvas
                     ref={frameRef2}

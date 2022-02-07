@@ -12,9 +12,10 @@ else {
 const globalConfig = {
     simplifiedInterfaceFor110,
     drawerBleeding: 48,
+    hasAddNewExample: false,
     toolBarHeight: 56,
-    oneSideOuterPadding: 25,  //shown as A in the below picture
-    oneSideInnerPadding: 10,  //shown as B in the below picture
+    oneSideOuterPadding: 0,  //shown as A in the below picture
+    oneSideInnerPadding: 0,  //shown as B in the below picture
     /*
 
 |                                                       |
@@ -28,7 +29,7 @@ const globalConfig = {
 
 
 
-    projectDrawerWidth: simplifiedInterfaceFor110 ? 150 : 250,
+    projectDrawerWidth: simplifiedInterfaceFor110 ? 150 : 150,
     dashboardTheme: () => createTheme({
         palette: {
             secondary: {

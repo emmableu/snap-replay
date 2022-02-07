@@ -54,22 +54,24 @@ const Player = (props) => {
                 setNextEnabled(true);
             }
         )
-
-        //
-        // ReplayerAPI.postScript(selectedProject, true, 0, 0, 0).then(
-        //     res => {
-        //         setNextEnabled(true);
-        //     }
-        // )
     }
 
+    React.useEffect( () => {
+        const width = playerPanelContainerWidth / window.devicePixelRatio;
+        const height = width * 0.75;
+        try {
+            scratch.current.vm.renderer.resize(width, height);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }, [playerPanelContainerWidth])
 
     return (
         <>
             <Button color="success" variant="outlined" onClick={handleGreenFlag}><FlagIcon/></Button>
             <Button color="error" variant="outlined" onClick={handleStop}><StopIcon/></Button>
-            <div style={{backgroundColor: "grey", border: "1px solid grey"}}>
-                {/*<div>*/}
+            <div style={{backgroundColor: "#c9c9c9", border: "1px solid #c9c9c9"}}>
                 <canvas
                     tabIndex={0}
                     ref={playerRef}

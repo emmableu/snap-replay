@@ -3,7 +3,7 @@ import rectSlice from "./features/rectSlice.js";
 import traceSlice from "./features/traceSlice.js";
 import selectedProjectSlice from "./features/selectedProjectSlice";
 import exampleCollectionSlice from "./features/exampleCollectionSlice";
-import userIdReducer from "./features/userIdSlice";
+import userIdSlice from "./features/userIdSlice";
 
 const store = configureStore({
    reducer: {
@@ -11,7 +11,7 @@ const store = configureStore({
        selectedProject: selectedProjectSlice,
        trace: traceSlice,
        exampleCollection: exampleCollectionSlice,
-       userId: userIdReducer
+       userId: userIdSlice,
    }
 });
 

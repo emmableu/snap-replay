@@ -12,7 +12,7 @@ import Frame from "./Frame";
 import Player from "./Player";
 import TwoFrame from "./TwoFrame";
 
-const steps = ['Play the program', 'View your trace'];
+const steps = ['Play the program', 'Inspect your trace'];
 
 export default function EditStepper(props) {
     const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);

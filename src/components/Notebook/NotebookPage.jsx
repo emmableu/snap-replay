@@ -104,15 +104,18 @@ const DashboardPage = () => {
                 >
                     <div className={classes.toolbar} />
                     <Divider />
-                    <div className={classes.addButtonContainer}>
-                        <Button
-                            onClick={e => e.preventDefault()}
-                            startIcon={<Add/>}
-                            color="secondary"
-                            variant="contained"
-                        > New Example
-                        </Button>
-                    </div>
+                    {globalConfig.hasAddNewExample  &&
+
+                        <div className={classes.addButtonContainer}>
+                            <Button
+                                onClick={e => e.preventDefault()}
+                                startIcon={<Add/>}
+                                color="secondary"
+                                variant="contained"
+                            > New Example
+                            </Button>
+                        </div>
+                    }
                     <ExampleMenu/>
                     {/*<ProjectMenu/>*/}
                 </div>

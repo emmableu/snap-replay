@@ -64,6 +64,7 @@ const Snap = (props) => {
 
 
     window.onmessage = function(e) {
+        if (!globalConfig.simplifiedInterfaceFor110) return;
         try {
             if (typeof e.data === "string") {
                 const data = JSON.parse(e.data);

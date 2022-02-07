@@ -13,6 +13,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotebookPage from "./NotebookPage";
 import globalConfig from "../../globalConfig";
+import {useDispatch} from "react-redux";
 
 const drawerBleeding = globalConfig.drawerBleeding;
 
@@ -67,6 +68,9 @@ function NotebookContainer() {
                 disableSwipeToOpen={false}
                 ModalProps={{
                     keepMounted: true,
+                    disableAutoFocus: true,
+                    disableEnforceFocus: true,
+                    disableEscapeKeyDown: true,
                 }}
             >
                 <StyledBox

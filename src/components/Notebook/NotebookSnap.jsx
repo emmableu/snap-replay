@@ -6,7 +6,6 @@ const NotebookSnap = (props) => {
 
     const canvasRef = useRef();
     const containerRef = useRef();
-    // const selectedProject = useSelector(state => state.selectedProject.data.selected)
 
     let width = 900;
     let height = 600;
@@ -47,7 +46,7 @@ const NotebookSnap = (props) => {
 
     return (
         <div ref={containerRef} style={{width: "100%", height: "100%"}}>
-            <canvas ref={canvasRef} tabIndex={1}/>
+            <canvas ref={canvasRef} tabIndex={2}/>
         </div>
     )
 }

@@ -72,6 +72,13 @@ class ReplayerAPI {
         }
         else if (type==="script" || type === "original") {
             window.ide.interpretReqAnchors(response.data.full, true);
+            if (window.ide.showSpritesTogether) {
+                window.ide.stage.children.forEach(m => {
+                    if (m instanceof SpriteMorph) {
+                        m.changeMenuItem("full");
+                    }
+                });
+            }
         }
         // else if (type === "sprite")
         return response;
