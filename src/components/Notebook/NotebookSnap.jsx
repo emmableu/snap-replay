@@ -28,7 +28,7 @@ const NotebookSnap = (props) => {
             false, true);
         // implemented fixLayout manually.
         window.notebookWorld = world;
-        world.isDevMode = true;
+        world.isDevMode = false;
         world.worldCanvas.focus();
         world.initLayout(width, height);
         const ide = new IDE_Morph();

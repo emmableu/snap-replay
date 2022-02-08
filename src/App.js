@@ -7,9 +7,9 @@ import Player from "./components/Player";
 import NotebookContainer from "./components/Notebook/NotebookContainer";
 import {useSelector} from "react-redux";
 import globalConfig from "./globalConfig";
-import SaveToNotebookButton from "./components/SaveToNotebookButton";
 import TitleBar from "./components/TitleBar";
 import LoginPage from "./components/LoginPage";
+import LowerRightCorner from "./components/LowerRightCorner";
 
 function App() {
     const userId = useSelector(s => s.userId.data);
@@ -21,7 +21,7 @@ function App() {
                 {globalConfig.simplifiedInterfaceFor110 ?
                         <Snap/> :
                     <>
-                        <TitleBar/>
+                        {/*<TitleBar/>*/}
                         <ResizablePanels
                             leftSize={playerPanelContainerWidth}
                             draggingType={"playerPanelContainerWidth"}
@@ -32,7 +32,7 @@ function App() {
                         </ResizablePanels>
                     </>
                 }
-                <SaveToNotebookButton/>
+                <LowerRightCorner/>
                 <NotebookContainer/>
                 </>
                 : <LoginPage/>}
