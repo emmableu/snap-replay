@@ -34,7 +34,7 @@ const Snap = (props) => {
             false, true);
         // implemented fixLayout manually.
         window.world = world;
-        world.isDevMode = false;
+        world.isDevMode = true;
         world.worldCanvas.focus();
         world.initLayout(width, height);
         const ide = new IDE_Morph(true);
