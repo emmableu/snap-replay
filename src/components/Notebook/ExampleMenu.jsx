@@ -4,18 +4,16 @@ import {useSelector} from "react-redux";
 import ProjectLoader from "./ProjectLoader";
 
 export const ExampleMenu = (props) => {
-    // const items = [{_id: "abc", name: "move with key"},
-    //     {_id: "dd", name: "dd"}]
-    const items = useSelector(state => state.exampleCollection.data.map(item =>
-        ({_id: item._id, name: item.name})))
+
+    const ids = useSelector(state => state.exampleCollection.idLst)
     return (
         <>
         {
-            items.map((item, idx)  => {
+            ids.map((_id, idx)  => {
                 return (
                     <ExampleMenuItem
-                        item={item}
-                        key={item._id}
+                        _id={_id}
+                        key={_id}
                     />
                 )
             })

@@ -1,5 +1,6 @@
 import {createTheme} from "@mui/material";
 import globalConfigIgnore from "../globalConfig.ignore";
+import tasksJson from "./data/tasksJson";
 const params = new URLSearchParams(window.location.search);
 
 let simplifiedInterfaceFor110;
@@ -41,6 +42,7 @@ const globalConfig = {
             },
         },
     }),
+    tasks: tasksJson,
 }
 
 Object.freeze(globalConfig);

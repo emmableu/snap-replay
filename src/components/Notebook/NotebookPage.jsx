@@ -13,8 +13,6 @@ import Divider from '@mui/material/Divider';
 // import NotebookTitleBar from "./NotebookTitleBar";
 // import ProjectMenu from "./ProjectMenu";
 import globalConfig from "../../globalConfig";
-// import ProjectTable from "./ProjectTable";
-// import NewProjectButton from "./DashboardAddNewProject/NewProjectButton";
 import {useDispatch, useSelector} from "react-redux";
 import Cookies from "js-cookie";
 import {Add} from "@mui/icons-material";
@@ -76,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "30px 0 0 0"
     }
 }));
-const DashboardPage = () => {
+const NotebookPage = () => {
     const goalPadWidth = useSelector(state => {return state.rect.data.goalPadWidth});
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -117,7 +115,6 @@ const DashboardPage = () => {
                         </div>
                     }
                     <ExampleMenu/>
-                    {/*<ProjectMenu/>*/}
                 </div>
 
                 <div style={{flexGrow: 1, display: "flex", flexDirection: "column", height: "100%"}}>
@@ -145,4 +142,4 @@ const DashboardPage = () => {
 }
 
 
-export default DashboardPage;
+export default NotebookPage;

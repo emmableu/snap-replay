@@ -6,10 +6,8 @@ const ProjectLoader = () => {
     const selectedXml = useSelector(
         state => {
             if (selectedExample) {
-                const examples = state.exampleCollection.data.filter( d => d._id === selectedExample)
-                if (examples.length === 1){
-                    return examples[0].xml;
-                }
+                const xml = state.exampleCollection.data[selectedExample]
+                return xml;
             }
             return null
         }
@@ -18,6 +16,11 @@ const ProjectLoader = () => {
         () => {
             if (selectedExample && selectedXml) {
                 window.notebookIde.interpretReqAnchors(selectedXml);
+            }
+            else {
+                if (window.notebookIde) {
+                    window.notebookIde.newProject();
+                }
             }
         }, [selectedExample]
     )

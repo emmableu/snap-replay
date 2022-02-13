@@ -41,7 +41,6 @@ const TwoFrame = ( ) => {
     const [frameWidth, setFrameWidth] = React.useState(calcFrameWidth(playerPanelContainerWidth));
     const minDistance = 1;
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
-    // const [timeRange, dispatch(setTimeRange)] = React.useState([0, 10]);
     const [originalMode, setOriginalMode] = React.useState(false);
 
 
@@ -95,16 +94,16 @@ const TwoFrame = ( ) => {
         if (newValue[1] - newValue[0] < minDistance) {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 100 - minDistance);
-                dispatch(setTimeRange)([clamped, clamped + minDistance]);
+                dispatch(setTimeRange([clamped, clamped + minDistance]));
             } else {
                 const clamped = Math.max(newValue[1], minDistance);
-                dispatch(setTimeRange)([clamped - minDistance, clamped]);
+                dispatch(setTimeRange([clamped - minDistance, clamped]));
             }
             replayer1.current.loadFrame(timeRange[0] * stride);
             replayer2.current.loadFrame(timeRange[1] * stride);
         }
         else {
-            dispatch(setTimeRange)(newValue);
+            dispatch(setTimeRange(newValue));
             if (activeThumb === 0) {
                 replayer1.current.loadFrame(timeRange[0] * stride);
             } else {

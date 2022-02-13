@@ -6,17 +6,25 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import {addExample} from "../redux/features/exampleCollectionSlice";
-import {useDispatch} from "react-redux";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import {addExample, setExample} from "../redux/features/exampleCollectionSlice";
+import {useDispatch, useSelector} from "react-redux";
 import * as UUID from "uuid";
+import globalConfig from "../globalConfig";
 
 const SaveToNotebookButton = () => {
     const dispatch = useDispatch();
     const [setNameDialogOpen, setSetNameDialogOpen] = React.useState(false);
-    const [exampleName, setExampleName] = React.useState("");
+    const ids = useSelector(state => state.exampleCollection.idLst)
+    const staticData = globalConfig.tasks;
+
+    const [exampleId, setExampleId] = React.useState("");
 
     const handleChangeTextField = (e) => {
-        setExampleName(e.target.value);
+        setExampleId(e.target.value);
     }
 
     const handleClickFab = () => {
@@ -29,10 +37,8 @@ const SaveToNotebookButton = () => {
 
     const handleClickSave = () => {
         handleCloseSetNameDialog();
-        dispatch(addExample({
-            _id: UUID.v4(),
-            name: exampleName,
-            description: "",
+        dispatch(setExample({
+            _id: exampleId,
             xml: window.ide.serializer.serialize(window.ide.stage),
         }));
     }
@@ -61,10 +67,26 @@ const SaveToNotebookButton = () => {
                             maxWidth: '100%',
                         }}
                     >
-                        <TextField fullWidth label="Name"
-                                   id="fullWidth"
-                                   onChange={handleChangeTextField}
-                        />
+                        {/*<TextField fullWidth label="Name"*/}
+                        {/*           id="fullWidth"*/}
+                        {/*           onChange={handleChangeTextField}*/}
+                        {/*/>*/}
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={exampleId}
+                                label="Age"
+                                onChange={handleChangeTextField}
+                            >
+                                {ids.map(_id =>
+                                    <MenuItem value={_id}>{staticData[_id].name}</MenuItem>
+                                )}
+                                {/*<MenuItem value={20}>Twenty</MenuItem>*/}
+                                {/*<MenuItem value={30}>Thirty</MenuItem>*/}
+                            </Select>
+                        </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
