@@ -16,14 +16,7 @@ const ProjectSelector = (props) => {
         "shoot": "Shoot a Star",
         "skiing": "Skiing Cat",
     };
-    const htmlDescriptions = {
-        panda:
-            (<p>Use arrow keys to control panda movement.<br/>When the panda eats all bamboos, you win. </p>),
-        shoot:
-            (<p>Shoot the star using the space key.<br/>Game ends when the star hits the gun, or when the star is out of the stage.  </p>),
-        skiing:
-            (<p>Use left/right arrow to control the cat and to avoid hitting the tree.<br/>When the cat hits the tree, game ends. </p>)
-    }
+
 
     function handleChangeSelect(event) {
         setActiveStep(0);
@@ -51,9 +44,6 @@ const ProjectSelector = (props) => {
             </Select>
             <FormHelperText>Select an example project</FormHelperText>
         </FormControl>
-            <div style={{color: "grey", fontStyle: "italic", margin: "10px 50px"}}>
-                    {htmlDescriptions[selectedProject]}
-            </div>
     </>
 )
 }

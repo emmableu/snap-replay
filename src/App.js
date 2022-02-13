@@ -13,29 +13,41 @@ import LowerRightCorner from "./components/LowerRightCorner";
 
 function App() {
     const userId = useSelector(s => s.userId.data);
+    const [activeStep, setActiveStep] = React.useState(0);
     const playerPanelContainerWidth = useSelector(state => {return state.rect.data.playerPanelContainerWidth});
     return (
         <div className="App" style={{width: "100%", height: "100%"}}>
-            {userId ?
-                <>
-                {globalConfig.simplifiedInterfaceFor110 ?
-                        <Snap/> :
-                    <>
-                        {/*<TitleBar/>*/}
-                        <ResizablePanels
-                            leftSize={playerPanelContainerWidth}
-                            draggingType={"playerPanelContainerWidth"}
-                            panelHeight={"100vh"}
-                        >
-                            <EditStepper/>
-                            <Snap />
-                        </ResizablePanels>
-                    </>
-                }
-                <LowerRightCorner/>
-                <NotebookContainer/>
-                </>
-                : <LoginPage/>}
+            {
+                globalConfig.playerOnly ?
+                    <EditStepper activeStep={activeStep} setActiveStep={setActiveStep} />
+                    :
+                    userId ?
+                            <>
+                                {globalConfig.simplifiedInterfaceFor110 ?
+                                    <Snap activeStep={1}/> :
+                                    <>
+                                        {/*<TitleBar/>*/}
+                                        <ResizablePanels
+                                            leftSize={playerPanelContainerWidth}
+                                            draggingType={"playerPanelContainerWidth"}
+                                            panelHeight={"100vh"}
+                                        >
+                                            <EditStepper activeStep={activeStep} setActiveStep={setActiveStep}/>
+                                            <Snap activeStep={globalConfig.controlCond? 1:activeStep} />
+                                        </ResizablePanels>
+                                    </>
+                                }
+                                <LowerRightCorner/>
+                                <NotebookContainer/>
+                            </>
+                            : <LoginPage/>
+
+
+            }
+
+
+
+
 
         </div>
   );

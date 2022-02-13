@@ -1,11 +1,12 @@
 import { createSlice} from '@reduxjs/toolkit'
+import globalConfig from "../../globalConfig";
 
 
 export const selectedProjectSlice = createSlice({
     name: 'selectedProjectSlice',
     initialState: {
         data: {
-            selected: "panda",
+            selected: globalConfig.originalSelectedProject ? globalConfig.originalSelectedProject : "panda",
         }
     },
     reducers: {

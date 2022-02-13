@@ -1,5 +1,6 @@
 import axiosSpring from "./axiosSpringConfig";
 import axiosExpress from "./axiosExpressConfig";
+import globalConfig from "../globalConfig";
 
 class ReplayerAPI {
 
@@ -45,32 +46,34 @@ class ReplayerAPI {
         // console.log("post script response: ", response.data);
         const projectJson = response.data;
         if (isOriginal) {
-            await this.postSnapXML(projectName, projectJson, "original");
+            await this.postSnapXML(projectName, projectJson, "script_no_asset_and_slice");
         }
         else {
-            await this.postSnapXML(projectName, projectJson, "script");
+            await this.postSnapXML(projectName, projectJson, "script_no_asset_and_slice");
         }
         return response;
     }
 
     static async postSnapXML (projectName, projectJson, type) {
-        console.log("postSnapXML");
+
         const response = await axiosExpress({
             method: 'post',
             url: `/post-snap-xml/${projectName}`,
             data: {
                 projectJson: projectJson === null? null: JSON.stringify(projectJson),
-                type,
+                type: type,
             }
         })
 
         // window.ide.slice = response.data.slice;
         window.ide.code = response.data;
 
-        if (type==="asset") {
+
+
+        if (type === "script_and_asset_no_slice") {
             window.ide.interpretReqAnchors(response.data.full, false);
         }
-        else if (type==="script" || type === "original") {
+        else {
             window.ide.interpretReqAnchors(response.data.full, true);
             if (window.ide.showSpritesTogether) {
                 window.ide.stage.children.forEach(m => {

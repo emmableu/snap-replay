@@ -1,5 +1,6 @@
 import {createTheme} from "@mui/material";
 import globalConfigIgnore from "../globalConfig.ignore";
+const params = new URLSearchParams(window.location.search);
 
 let simplifiedInterfaceFor110;
 if (globalConfigIgnore) {
@@ -10,7 +11,10 @@ else {
 }
 
 const globalConfig = {
+    originalSelectedProject: params.get("project"),
+    controlCond: globalConfigIgnore.controlCond,
     simplifiedInterfaceFor110,
+    playerOnly: globalConfigIgnore.playerOnly,
     drawerBleeding: 48,
     hasAddNewExample: false,
     toolBarHeight: 56,

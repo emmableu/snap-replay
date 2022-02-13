@@ -6,7 +6,7 @@ import ReplayerAPI from "../api/ReplayerAPI";
 import globalConfig from "../globalConfig";
 
 const Snap = (props) => {
-
+    const {activeStep} = props;
     const canvasRef = useRef();
     const containerRef = useRef();
     const selectedProject = useSelector(state => state.selectedProject.data.selected)
@@ -51,7 +51,7 @@ const Snap = (props) => {
 
     useEffect(() => {
         if (!globalConfig.simplifiedInterfaceFor110) {
-            ReplayerAPI.postSnapXML(selectedProject, null, "asset").then(
+            ReplayerAPI.postSnapXML(selectedProject, null, "script_and_asset_no_slice").then(
             );
         }
     }, [selectedProject])
@@ -79,9 +79,12 @@ const Snap = (props) => {
 
 
     return (
+        <>
         <div ref={containerRef} style={{width: "100%", height: "100vh"}}>
+            {activeStep === 0 && <div style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "white"}}/>}
             <canvas ref={canvasRef} tabIndex={1}/>
         </div>
+        </>
     )
 }
 

@@ -6,6 +6,7 @@ import ScratchStage from "../whisker/scratch-stage"
 import ReplayerAPI from "../api/ReplayerAPI";
 import {useSelector, useDispatch} from "react-redux";
 import {setStride, setTrace} from "../redux/features/traceSlice";
+import globalConfig from "../globalConfig";
 
 const Player = (props) => {
     const {nextEnabled, setNextEnabled} = props;
@@ -45,15 +46,23 @@ const Player = (props) => {
         scratch.current.stop();
         const trace = scratch.current.traceLogger.trace;
         const stride = trace.endIdx / 100;
+        if (!globalConfig.playerOnly) {
+            ReplayerAPI.postTrace(selectedProject, trace.blocks).then(
+                res => {
+                    dispatch(setTrace({...trace}));
+                    dispatch(setStride(stride));
+                    scratch.current.clearTrace();
+                    setNextEnabled(true);
+                }
+            )
+        }
+        else {
+            dispatch(setTrace({...trace}));
+            dispatch(setStride(stride));
+            scratch.current.clearTrace();
+            setNextEnabled(true);
+        }
 
-        ReplayerAPI.postTrace(selectedProject, trace.blocks).then(
-            res => {
-                dispatch(setTrace({...trace}));
-                dispatch(setStride(stride));
-                scratch.current.clearTrace();
-                setNextEnabled(true);
-            }
-        )
     }
 
     React.useEffect( () => {

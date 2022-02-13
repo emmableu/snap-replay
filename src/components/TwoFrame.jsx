@@ -110,6 +110,7 @@ const TwoFrame = ( ) => {
     };
 
     const handleMouseUp = (e, newValue) => {
+        if (globalConfig.playerOnly) return;
         const traceBlocks =  new Set(trace.blocks.slice(newValue[0] * stride, newValue[1] * stride));
         window.ide.traceBlocks = traceBlocks;
         if (!originalMode) {
@@ -169,12 +170,15 @@ const TwoFrame = ( ) => {
                 disableSwap
             />
             {/*<Button onClick={showFullCode}>Show Complete Code</Button>*/}
-            <FormGroup>
-                <FormControlLabel
-                    originalMode={originalMode}
-                    onChange={handleChangeSwitch}
-                    control={<Switch />} label="Show Full Project" />
-            </FormGroup>
+            {
+                !globalConfig.playerOnly &&
+                <FormGroup>
+                    <FormControlLabel
+                        originalMode={originalMode}
+                        onChange={handleChangeSwitch}
+                        control={<Switch />} label="Show Full Project" />
+                </FormGroup>
+            }
         </div>
     )
 }
