@@ -39,17 +39,11 @@ const SaveToNotebookButton = () => {
 
     return (
         <>
-            <div style={{
-                position: "absolute",
-                right: "70px",
-                bottom:"100px",
-                zIndex: 9,
-            }}>
+            <div>
                 <Tooltip title="Save to Notebook">
-                <Fab onClick={handleClickFab}><DownloadIcon/></Fab>
+                <Fab size="small" onClick={handleClickFab}><DownloadIcon/></Fab>
                 </Tooltip>
             </div>
-
             <Dialog
                 open={setNameDialogOpen}
                 onClose={handleCloseSetNameDialog}

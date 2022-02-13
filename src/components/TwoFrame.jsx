@@ -9,7 +9,7 @@ import Slider from '@mui/material/Slider';
 import {Replayer} from "../Replayer.js";
 import ReplayerAPI from "../api/ReplayerAPI.js";
 import axios from "../api/axiosSpringConfig.js"
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import replayerAPI from "../api/ReplayerAPI.js";
 const ScratchRender = require('scratch-render/src/RenderWebGL.js');
 import FormGroup from '@mui/material/FormGroup';
@@ -17,6 +17,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Bisect from "../util/Bisect";
 import globalConfig from "../globalConfig";
+import {setIsFullProject} from "../redux/features/isFullProjectSlice";
+import {setTimeRange} from "../redux/features/timeRangeSlice";
 
 const TwoFrame = ( ) => {
     const frameRef1 = React.useRef(null);
@@ -25,6 +27,8 @@ const TwoFrame = ( ) => {
     const replayer2 = React.useRef(null);
     const renderer1 = React.useRef(null);
     const renderer2 = React.useRef(null);
+    const timeRange = useSelector(s => s.timeRange.data);
+    const dispatch = useDispatch();
 
     const stride = useSelector(state => state.trace.stride);
     const trace = useSelector(state => state.trace.data);
@@ -37,7 +41,7 @@ const TwoFrame = ( ) => {
     const [frameWidth, setFrameWidth] = React.useState(calcFrameWidth(playerPanelContainerWidth));
     const minDistance = 1;
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
-    const [timeRange, setTimeRange] = React.useState([0, 10]);
+    // const [timeRange, dispatch(setTimeRange)] = React.useState([0, 10]);
     const [originalMode, setOriginalMode] = React.useState(false);
 
 
@@ -91,16 +95,16 @@ const TwoFrame = ( ) => {
         if (newValue[1] - newValue[0] < minDistance) {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 100 - minDistance);
-                setTimeRange([clamped, clamped + minDistance]);
+                dispatch(setTimeRange)([clamped, clamped + minDistance]);
             } else {
                 const clamped = Math.max(newValue[1], minDistance);
-                setTimeRange([clamped - minDistance, clamped]);
+                dispatch(setTimeRange)([clamped - minDistance, clamped]);
             }
             replayer1.current.loadFrame(timeRange[0] * stride);
             replayer2.current.loadFrame(timeRange[1] * stride);
         }
         else {
-            setTimeRange(newValue);
+            dispatch(setTimeRange)(newValue);
             if (activeThumb === 0) {
                 replayer1.current.loadFrame(timeRange[0] * stride);
             } else {
@@ -125,6 +129,7 @@ const TwoFrame = ( ) => {
     const handleChangeSwitch = (event) => {
         const newChecked = event.target.checked;
         setOriginalMode(newChecked);
+        dispatch(setIsFullProject(newChecked))
         if (newChecked) {
             replayerAPI.postScript(selectedProject, true, 0, 0, 0).then(
                 res => setOriginalMode(true)
