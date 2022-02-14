@@ -7,9 +7,15 @@ import Button from '@mui/material/Button';
 // import {IdeaBuilderIcon} from "../primitives/Icon/Icon";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import globalConfig from "../../globalConfig";
-import {Avatar, Box} from "@mui/material";
-// import {useSelector} from "react-redux";
-// import Cookies from "js-cookie"
+import {Avatar, Box, Tooltip, Fab} from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
+import {setExample} from "../../redux/features/exampleCollectionSlice";
+import {useDispatch, useSelector} from "react-redux";
+import Snackbar from '@mui/material/Snackbar';
+import Fade from '@mui/material/Fade';
+import Slide from '@mui/material/Slide';
+import Grow from '@mui/material/Grow';
 
 const drawerWidth = globalConfig.projectDrawerWidth;
 const useStyles = makeStyles((theme) => ({
@@ -26,11 +32,20 @@ const useStyles = makeStyles((theme) => ({
 export const NotebookTitleBar = (props) => {
     const {userId} = props;
     const classes = useStyles();
-    // const userId = useSelector(state =>
-    //     state.dashboard.value===null? null:state.dashboard.value.userId);
-    //
-    // React.useEffect(() => {
-    // }, [userId])
+    const dispatch = useDispatch();
+    const selectedExample = useSelector(state => state.exampleCollection.selectedId);
+    const [open, setOpen] = React.useState(false);
+
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleSave = () => {
+        setOpen(true);
+        dispatch(setExample({_id: selectedExample,
+            xml: window.notebookIde.serializer.serialize(window.notebookIde.stage)}));
+    }
 
     return (
         <AppBar className={classes.appBar}
@@ -40,11 +55,28 @@ export const NotebookTitleBar = (props) => {
         >
             <Toolbar>
                 <Avatar   sx={{ width: 24, height: 24 }}
-                          alt="notebook" src="/static/notebook.png" />
+                          alt="notebook" src="static/notebook.png" />
 
                 <Typography variant="subtitle" className={classes.title}>
                     {' '} My Feature Prototypes
                 </Typography>
+
+                <Tooltip title={"save and download"}>
+                <IconButton color="primary"
+                            aria-label="save and download"
+                            onClick={handleSave}
+                            component="span">
+                    <DownloadIcon />
+                </IconButton>
+
+                </Tooltip>
+
+                <Snackbar
+                    open={open}
+                    onClose={handleClose}
+                    message="Saved"
+                />
+
                 <PersonOutlineOutlinedIcon/>
                 {userId}
             </Toolbar>

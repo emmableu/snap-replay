@@ -23,6 +23,7 @@ import ResizablePanels from "../../util/ResizablePanels";
 import EditStepper from "../EditStepper";
 import Snap from "../Snap";
 import GoalPad from "./GoalPad";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const drawerWidth = globalConfig.projectDrawerWidth;
 

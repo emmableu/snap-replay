@@ -14,12 +14,14 @@ import {addExample, setExample} from "../redux/features/exampleCollectionSlice";
 import {useDispatch, useSelector} from "react-redux";
 import * as UUID from "uuid";
 import globalConfig from "../globalConfig";
+import Snackbar from "@mui/material/Snackbar";
 
 const SaveToNotebookButton = () => {
     const dispatch = useDispatch();
     const [setNameDialogOpen, setSetNameDialogOpen] = React.useState(false);
     const ids = useSelector(state => state.exampleCollection.idLst)
     const staticData = globalConfig.tasks;
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
     const [exampleId, setExampleId] = React.useState("");
 
@@ -37,11 +39,17 @@ const SaveToNotebookButton = () => {
 
     const handleClickSave = () => {
         handleCloseSetNameDialog();
+        setSnackbarOpen(true);
         dispatch(setExample({
             _id: exampleId,
             xml: window.ide.serializer.serialize(window.ide.stage),
         }));
     }
+
+
+    const handleClose = () => {
+        setSnackbarOpen(false);
+    };
 
     return (
         <>
@@ -72,30 +80,36 @@ const SaveToNotebookButton = () => {
                         {/*           onChange={handleChangeTextField}*/}
                         {/*/>*/}
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <InputLabel id="demo-simple-select-label">Name</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={exampleId}
-                                label="Age"
+                                label="Name"
                                 onChange={handleChangeTextField}
                             >
                                 {ids.map(_id =>
                                     <MenuItem value={_id}>{staticData[_id].name}</MenuItem>
                                 )}
-                                {/*<MenuItem value={20}>Twenty</MenuItem>*/}
-                                {/*<MenuItem value={30}>Thirty</MenuItem>*/}
                             </Select>
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseSetNameDialog}>Cancel</Button>
-                    <Button onClick={handleClickSave} autoFocus>
+                    <Button onClick={handleClickSave} autoFocus disabled={!exampleId}>
                         Save
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={snackbarOpen}
+                vertical='bottom'
+                horizontal='center'
+                onClose={handleClose}
+                message="Saved"
+                sx={{bottom: 100}}
+            />
 
         </>
     )

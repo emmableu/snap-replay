@@ -32,7 +32,7 @@ const ProjectSelector = (props) => {
                 labelId="demo-simple-select-helper-label"
                 id="demo-simple-select-helper"
                 value={selectedProject}
-                label="Age"
+                label="Project"
                 onChange={handleChangeSelect}
             >
                 <MenuItem value="">
