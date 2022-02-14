@@ -12,6 +12,8 @@ import Frame from "./Frame";
 import Player from "./Player";
 import TwoFrame from "./TwoFrame";
 import globalConfig from "../globalConfig";
+import OutboundIcon from '@mui/icons-material/Outbound';
+import {Tooltip} from "@mui/material";
 
 const steps = ['Play the program', 'Inspect your trace'];
 
@@ -49,6 +51,16 @@ export default function EditStepper(props) {
                 setNextEnabled={setNextEnabled}/>}
             <div style={{color: "grey", fontStyle: "italic", margin: "10px 50px"}}>
                 {htmlDescriptions[selectedProject]}
+                {/*https://docs.google.com/document/d/1Adkp09Y4lfw9Q1rIK-h2EmZkLtoFtxPEFpodHklNZ7k/edit?usp=sharing*/}
+                <Tooltip title="Open in new tab">
+                <Button
+                    target="_blank"
+                    href="https://docs.google.com/document/d/1Adkp09Y4lfw9Q1rIK-h2EmZkLtoFtxPEFpodHklNZ7k/edit?usp=sharing"
+                    endIcon={<OutboundIcon/>}
+                >
+                    Decompose By Sequence Worksheet
+                </Button>
+                </Tooltip>
             </div>
 
             {playerOnly && controlCond

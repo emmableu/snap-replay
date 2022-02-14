@@ -18,7 +18,6 @@ export const ExampleMenu = (props) => {
                 )
             })
         }
-            <ProjectLoader/>
         </>
     )
 }

@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotebookPage from "./NotebookPage";
 import globalConfig from "../../globalConfig";
 import {useDispatch} from "react-redux";
+import ProjectLoader from "./ProjectLoader";
 
 const drawerBleeding = globalConfig.drawerBleeding;
 
@@ -103,6 +104,7 @@ function NotebookContainer() {
                     <NotebookPage/>
                 </StyledBox>
             </Drawer>
+            <ProjectLoader open={open}/>
         </Root>
     );
 }

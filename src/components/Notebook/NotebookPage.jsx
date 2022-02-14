@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "30px 0 0 0"
     }
 }));
-const NotebookPage = () => {
+const NotebookPage = (props) => {
     const goalPadWidth = useSelector(state => {return state.rect.data.goalPadWidth});
     const classes = useStyles();
     const dispatch = useDispatch();

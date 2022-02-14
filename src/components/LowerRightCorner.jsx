@@ -14,6 +14,8 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import globalConfig from "../globalConfig";
 import {useSelector} from "react-redux";
 import ReplayerAPI from "../api/ReplayerAPI";
+import Button from "@mui/material/Button";
+import FlagIcon from "@mui/icons-material/Flag";
 
 const LowerRightCorner = () => {
 
@@ -46,15 +48,29 @@ const LowerRightCorner = () => {
         }
     }
 
+    const handleGreenFlag = (e) => {
+        if (window.ide) {
+            window.ide.runScripts();
+        }
+    }
 
     return (
         <>
             <div style={{
                 position: "absolute",
-                right: "70px",
+                right: "55px",
                 bottom:"100px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
                 zIndex: 9,
+                justifyContent: "center",
+                alignItems: "center"
             }}>
+                <Tooltip title="Press Green Flag">
+                    <Fab  size="small"  onClick={handleGreenFlag}><FlagIcon   color="success"/></Fab>
+                </Tooltip>
+
             {!globalConfig.simplifiedInterfaceFor110 &&
                 <Tooltip title="Reload">
                 <Fab size="small" onClick={handleReload}><ReplayIcon/></Fab>

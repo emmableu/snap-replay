@@ -1,7 +1,8 @@
 import React from "react";
 import {useSelector} from "react-redux";
 
-const ProjectLoader = () => {
+const ProjectLoader = (props) => {
+    const {open} = props;
     const selectedExample = useSelector(state => state.exampleCollection.selectedId);
     const selectedXml = useSelector(
         state => {
@@ -15,14 +16,16 @@ const ProjectLoader = () => {
     React.useEffect(
         () => {
             if (selectedExample && selectedXml) {
-                window.notebookIde.interpretReqAnchors(selectedXml);
+                if (window.notebookIde) {
+                    window.notebookIde.interpretReqAnchors(selectedXml);
+                }
             }
             else {
                 if (window.notebookIde) {
                     window.notebookIde.newProject();
                 }
             }
-        }, [selectedExample]
+        }, [selectedExample, open]
     )
 
     return (

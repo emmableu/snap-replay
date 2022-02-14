@@ -37,7 +37,10 @@ function App() {
                                         </ResizablePanels>
                                     </>
                                 }
-                                <LowerRightCorner/>
+                                { (globalConfig.simplifiedInterfaceFor110 ||
+                                    globalConfig.controlCond ||
+                                    activeStep === 1 )
+                                    && <LowerRightCorner/>}
                                 <NotebookContainer/>
                             </>
                             : <LoginPage/>

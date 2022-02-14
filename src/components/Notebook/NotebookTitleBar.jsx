@@ -10,7 +10,7 @@ import globalConfig from "../../globalConfig";
 import {Avatar, Box, Tooltip, Fab} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
-import {setExample} from "../../redux/features/exampleCollectionSlice";
+import {download, setExample} from "../../redux/features/exampleCollectionSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Snackbar from '@mui/material/Snackbar';
 import Fade from '@mui/material/Fade';
@@ -45,6 +45,7 @@ export const NotebookTitleBar = (props) => {
         setOpen(true);
         dispatch(setExample({_id: selectedExample,
             xml: window.notebookIde.serializer.serialize(window.notebookIde.stage)}));
+        dispatch(download());
     }
 
     return (

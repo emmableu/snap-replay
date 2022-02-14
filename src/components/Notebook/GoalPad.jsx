@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import {useDispatch, useSelector} from "react-redux";
 import globalConfig from "../../globalConfig";
+import Gif from "../primitives/Gif";
 
 const useStyles = makeStyles((theme) => ({
     goalPad: {
@@ -36,6 +37,7 @@ const GoalPad = () => {
             <Box className={classes.goalPad}>
                 <h5>{item.name}</h5>
                 {item.content}
+                <Gif imgSrc={item.png} gifSrc={item.gif}/>
                 {/*Goal:*/}
                 {/*Your goal is to ...*/}
             </Box>

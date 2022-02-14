@@ -15,8 +15,8 @@ const globalConfigIgnore = {
      simplifiedInterfaceFor110,
      playerOnly,
      controlCond,
-     // axiosExpressBaseURL: "https://isnap.csc.ncsu.edu/node/",
-     axiosExpressBaseURL: "http://localhost:9090/",
+     axiosExpressBaseURL: "https://isnap.csc.ncsu.edu/node/",
+     // axiosExpressBaseURL: "http://localhost:9090/",
      axiosSpringBaseURL: "https://isnap.csc.ncsu.edu/servlet/service/",
 }
 
