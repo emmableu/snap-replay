@@ -3,7 +3,7 @@ import globalConfig from "../../globalConfig";
 import React from "react";
 import ExampleActionDropdown from "./ExampleActionDropdown";
 import {useDispatch, useSelector} from "react-redux";
-import {setSelectedExampleId} from "../../redux/features/exampleCollectionSlice";
+import {setExample, setSelectedExampleId} from "../../redux/features/exampleCollectionSlice";
 
 const ExampleMenuItem = (props) => {
     const {_id} = props;
@@ -20,8 +20,12 @@ const ExampleMenuItem = (props) => {
         <Paper
             variant="outlined"
             elevation={0}
-            onClick={(e) => {
-                dispatch(setSelectedExampleId({_id: _id}));
+            onClick={async (e) => {
+                if (_id !== selectedExample) {
+                    dispatch(setExample({_id: selectedExample,
+                        xml: window.notebookIde.serializer.serialize(window.notebookIde.stage)}));
+                    dispatch(setSelectedExampleId({_id: _id}));
+                }
             }}
             onMouseEnter={toggleHover}
             onMouseLeave={toggleHover}

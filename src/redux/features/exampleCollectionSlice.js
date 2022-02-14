@@ -11,6 +11,7 @@ export const exampleCollectionSlice = createSlice({
     reducers: {
         setExample: (state, action) => {
             const {_id, xml} = action.payload;
+            // console.log("setExample: ", {_id, xml});
             // const idx = state.data.filter(d => d._id === _id)[0];
             // if (idx > -1) {
             //     state.data[idx][attr] = val;
