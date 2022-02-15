@@ -64,7 +64,7 @@ Logger.prototype.note = function (msg, data) {
             messageStarter = messageStarter + ".expCond"
         }
     }
-    this.log(messageStarter + msg, data);
+    this.log(messageStarter + "." + msg, data);
 }
 
 Object.freeze(globalConfig);
