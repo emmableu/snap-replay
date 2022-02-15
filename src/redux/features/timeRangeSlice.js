@@ -9,6 +9,7 @@ export const timeRangeSlice = createSlice({
     reducers: {
         setTimeRange: (state, action) => {
             state.data = action.payload;
+            Trace.note("setTimeRange", action.payload);
         },
     },
 })

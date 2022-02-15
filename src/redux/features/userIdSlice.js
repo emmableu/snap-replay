@@ -9,6 +9,7 @@ export const userIdSlice = createSlice({
     reducers: {
         setUserId: (state, action) => {
             state.data = action.payload;
+            Trace.note("setUserId", action.payload);
             Cookies.set("userId", action.payload);
         },
         clearUserId: (state, action) => {

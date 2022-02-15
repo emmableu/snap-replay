@@ -11,6 +11,11 @@ else {
     simplifiedInterfaceFor110 = true;
 }
 
+// Trace.log("codegen.info", {
+//     "isCSC110": simplifiedInterfaceFor110,
+//     "isControlCond": globalConfigIgnore.controlCond,
+//     "isPlayerOnly": globalConfigIgnore.playerOnly,
+// })
 const globalConfig = {
     originalSelectedProject: params.get("project"),
     controlCond: globalConfigIgnore.controlCond,
@@ -43,6 +48,23 @@ const globalConfig = {
         },
     }),
     tasks: tasksJson,
+}
+
+Logger.prototype.note = function (msg, data) {
+    let messageStarter = "codegen";
+    if (globalConfig.simplifiedInterfaceFor110) {
+        messageStarter = messageStarter + ".csc110"
+    }
+    else {
+        messageStarter = messageStarter + ".e115"
+        if (globalConfig.controlCond) {
+            messageStarter = messageStarter + ".controlCond"
+        }
+        else {
+            messageStarter = messageStarter + ".expCond"
+        }
+    }
+    this.log(messageStarter + msg, data);
 }
 
 Object.freeze(globalConfig);

@@ -42,6 +42,7 @@ export const NotebookTitleBar = (props) => {
     };
 
     const handleSave = () => {
+        Trace.log("downloadNotebook")
         setOpen(true);
         dispatch(setExample({_id: selectedExample,
             xml: window.notebookIde.serializer.serialize(window.notebookIde.stage)}));

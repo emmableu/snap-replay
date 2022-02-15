@@ -1,4 +1,5 @@
 import { createSlice} from '@reduxjs/toolkit'
+import JSZip from  'jszip';
 
 const idLst = ["move_with_key", "spawn_of_clones", "shoot_when_space_key_pressed",
     "move_slowly_leftwards", "destroy_clone_on_touch", "rotate_actor_on_touch", "destroy_clone_on_edge" ];
@@ -26,6 +27,7 @@ export const exampleCollectionSlice = createSlice({
             // if (idx > -1) {
             //     state.data[idx][attr] = val;
             // }
+            Trace.note("setExample", _id);
             window.localStorage.setItem(_id, xml);
             state.data[_id] = xml;
         },
@@ -55,14 +57,30 @@ export const exampleCollectionSlice = createSlice({
         },
 
         download: (state, action) => {
-            function downloadFile(content, fileName, contentType) {
-                const a = document.createElement("a");
-                const file = new Blob([content], { type: contentType });
-                a.href = URL.createObjectURL(file);
-                a.download = fileName;
-                a.click();
+            // function downloadFile(content, fileName, contentType) {
+            //     const a = document.createElement("a");
+            //     const file = new Blob([content], { type: contentType });
+            //     a.href = URL.createObjectURL(file);
+            //     a.download = fileName;
+            //     a.click();
+            // }
+
+
+            let filename = "code-snippets"
+            const zip = new JSZip()
+            const folder = zip.folder("code-snippets")
+            for ( const _id in state.data ) {
+                folder.file(`${_id}.xml`, state.data[_id])
             }
-            downloadFile(JSON.stringify(state.data), "example-collection.json", "text/plain");
+            zip.generateAsync({type:"blob"})
+                .then(blob => saveAs(blob, filename))
+                .catch(e => console.log(e));
+
+            // downloadFile(JSON.stringify(state.data), "example-collection.json", "text/plain");
+            // downloadFile()
+
+
+
         }
     }
 })

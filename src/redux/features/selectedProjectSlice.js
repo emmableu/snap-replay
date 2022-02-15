@@ -12,6 +12,7 @@ export const selectedProjectSlice = createSlice({
     reducers: {
         setSelectedProject: (state, action) => {
             state.data.selected = action.payload;
+            Trace.note("setSelectedProject", action.payload);
         }
     }
 })

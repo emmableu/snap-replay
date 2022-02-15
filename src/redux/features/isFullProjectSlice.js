@@ -9,6 +9,7 @@ export const isFullProjectSlice = createSlice({
     reducers: {
         setIsFullProject: (state, action) => {
             state.data = action.payload;
+            Trace.note("setIsFullProject", action.payload);
         },
     },
 })

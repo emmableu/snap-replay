@@ -10,9 +10,12 @@ export const traceSlice = createSlice({
     reducers: {
         setTrace: (state, action) => {
             state.data = action.payload;
+            Trace.note("setTrace", action.payload);
         },
         setStride: (state, action) => {
             state.stride = action.payload;
+            Trace.note("setStride", action.payload);
+
         }
     }
 })
