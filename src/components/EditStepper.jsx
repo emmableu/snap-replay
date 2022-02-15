@@ -45,22 +45,30 @@ export default function EditStepper(props) {
     }
 
     return (
-        <>
+        <>            {!playerOnly &&
+
+            <div style={{padding: "20px 30px"}}>
+            <Tooltip title="Open in new tab">
+
+                <Button
+                    target="_blank"
+                    href=
+                        {controlCond?
+                            "https://docs.google.com/document/d/e/2PACX-1vTj9XObjv-kiiWJWNoQaw0OvWGWN1cVUM8gLs0zWYzvo926X-37IlXXdRs-zNdHCJ2ktG6jNu1LQocv/pub"
+                            : "about:_blank"
+                        }
+                    endIcon={<OutboundIcon/>}>
+                Decompose By Sequence Worksheet
+            </Button>
+            </Tooltip>
+            </div>
+        }
+
             {!playerOnly && <ProjectSelector
                 setActiveStep={setActiveStep}
                 setNextEnabled={setNextEnabled}/>}
             <div style={{color: "grey", fontStyle: "italic", margin: "10px 50px"}}>
                 {htmlDescriptions[selectedProject]}
-                {/*https://docs.google.com/document/d/1Adkp09Y4lfw9Q1rIK-h2EmZkLtoFtxPEFpodHklNZ7k/edit?usp=sharing*/}
-                <Tooltip title="Open in new tab">
-                <Button
-                    target="_blank"
-                    href="https://docs.google.com/document/d/1Adkp09Y4lfw9Q1rIK-h2EmZkLtoFtxPEFpodHklNZ7k/edit?usp=sharing"
-                    endIcon={<OutboundIcon/>}
-                >
-                    Decompose By Sequence Worksheet
-                </Button>
-                </Tooltip>
             </div>
 
             {playerOnly && controlCond

@@ -13,3 +13,4 @@ build
 .DS_Store
 globalConfig.ignore.js
 npm-debug.log
+deploy.sh

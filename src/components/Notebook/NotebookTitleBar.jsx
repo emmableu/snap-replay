@@ -59,7 +59,7 @@ export const NotebookTitleBar = (props) => {
                           alt="notebook" src="static/notebook.png" />
 
                 <Typography variant="subtitle" className={classes.title}>
-                    {' '} My Feature Prototypes
+                    {' '} My Code Snippets
                 </Typography>
 
                 <Tooltip title={"save and download"}>

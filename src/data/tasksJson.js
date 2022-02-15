@@ -28,9 +28,9 @@ const tasksJson =
         "move_slowly_leftwards":
             {
                 "name": "Move Slowly Leftwards",
-                "content": <p>When the green flag is clicked, the star slowly leftwards.</p>,
-                "png":"https://raw.githubusercontent.com/emmableu/image/master/e115/spawn_of_clones.png",
-                "gif":"https://raw.githubusercontent.com/emmableu/image/master/e115/spawn_of_clones.gif",
+                "content": <p>When the green flag is clicked, the star moves slowly leftwards.</p>,
+                "png":"https://raw.githubusercontent.com/emmableu/image/master/e115/move_slowly_leftwards.png",
+                "gif":"https://raw.githubusercontent.com/emmableu/image/master/e115/move_slowly_leftwards.gif",
             },
 
         "destroy_clone_on_touch":

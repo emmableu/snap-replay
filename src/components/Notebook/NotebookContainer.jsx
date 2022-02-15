@@ -90,7 +90,7 @@ function NotebookContainer() {
                         {open ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
                     </PullerButton>
                     <Typography sx={{ p: 2, color: 'text.secondary' }}>
-                        My Feature Prototypes
+                        My Code Snippets
                     </Typography>
                 </StyledBox>
                 <StyledBox
