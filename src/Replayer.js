@@ -71,6 +71,7 @@ export class Replayer {
     }
 
     loadFrame(frameId) {
+        frameId = this.trace.vals[frameId];
         console.log("loadFrame: ", frameId);
         if (frameId >= this.trace.endIdx) return;
         let drawables = this.getCurFrameDrawables(frameId, this.trace);

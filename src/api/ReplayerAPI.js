@@ -32,15 +32,15 @@ class ReplayerAPI {
         return buffer
     }
 
-    static async postScript (projectName, isOriginal, start, end, stride) {
+    static async postScript (projectName, isOriginal, start, end) {
         const response = await axiosSpring({
             method: 'post',
             url: `/post-script/wwang33/${projectName}`,
             data: {
                 projectName: projectName,
                 isOriginal: isOriginal,
-                start: Math.floor(start * stride),
-                end: Math.floor(end * stride),
+                start: Math.floor(start),
+                end: Math.floor(end),
             }
         })
         // console.log("post script response: ", response.data);

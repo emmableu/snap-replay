@@ -29,9 +29,6 @@ class TraceLogger {
     // ]
     static attributeLst = ["posx", "posy", "skinId","skinSizeX", "skinSizeY",
         "visible","direction",
-        // "brightness", "color", "direction", "fisheye",
-        // "ghost", "mosaic", "pixelate",
-        // "scalex", "scaley",  "visible", "whirl"
     ]
 
     fillAttribute(attribute, d, obj) {
@@ -53,31 +50,50 @@ class TraceLogger {
 
     addAttributeToDrawable(attributeName, newVal, drawableId) {
         const data = this.trace.drawables[drawableId][attributeName].data;
-        if (newVal !== data[data.length - 1]) {
+        let needsUpdate = false;
+        if (attributeName === "posx" || attributeName === "posy") {
+            if (Math.abs(newVal - data[data.length - 1]) > 50) {
+                needsUpdate = true;
+            }
+        }
+        else if (attributeName === "direction") {
+            if (newVal !== data[data.length - 1]) {needsUpdate = true}}
+
+        if (needsUpdate) {
             data.push(newVal);
             this.trace.drawables[drawableId][attributeName].id.push(this.curId);
         }
     }
 
+    transform () {
+        let changeLst = [];
+        for (const [id, obj] of Object.entries(this.trace.drawables)) {
+            for (const attribute of TraceLogger.attributeLst) {
+                if (!obj[attribute]) break;
+                changeLst.push(...obj[attribute].id);
+            }
+        }
+        for (const [opcode, idList] of this.trace.keyOps) {
+            changeLst.push(...idList);
+        }
+        changeLst.push(...keysDown.id);
+        changeLst = changeLst.sort((a, b) => a-b);
+        const changeSet = new Set(changeLst);
+        this.vals = [...changeSet].sort((a, b) => a - b);
+    }
+
+
     logExecutionTrace (blockId, vm, target) {
         const block = target.blocks.getBlock(blockId);
-        // if (block) {
-        //     console.log("block.opcode: ", block.opcode);
-        // }
         if (!block || this.ignoreOpcodes.has(block.opcode)) return;
-        // console.log("block.opcode: ", block.opcode);
 
         this.curId += 1;
         this.trace.endIdx = this.curId;
         this.trace.blocks.push(blockId);
-        // const blocksData = this.trace.blocks.data;
-        //
-        // if (
-        //     blocksData.length === 0 ||
-        //     blockId !== blocksData[blocksData.length - 1]) {
-        //     blocksData.push(blockId);
-        //     this.trace.blocks.id.push(this.curId);
-        // }
+
+        if (block.opcode in this.trace.keyOps) {
+            this.trace.keyOps[block.opcode].push(this.curId);
+        }
 
         let keysDown;
         let keysDownList = target.runtime.ioDevices.keyboard._keysPressed;
@@ -102,7 +118,6 @@ class TraceLogger {
         if (!this.trace.stage) {
             const stage = vm.runtime.getTargetForStage();
             if (stage) {
-                // console.log("stage: ", stage);
                 const stageSkinId = stage.sprite.costumes.map(c => c.md5)[stage.currentCostume];
                 this.trace.stage = {drawableId: stage.sprite.clones[0].toString(), skinId: stageSkinId}
             }
@@ -193,7 +208,9 @@ class TraceLogger {
             drawables: {},
             blocks: [],
             keysDown: {data: [], id: []},
-            endIdx: -1
+            keyOps: {"control_create_clone_of":[], "control_delete_this_clone": []},
+            endIdx: -1,
+            vals: [],
         };
         this.curId = -1;
     }

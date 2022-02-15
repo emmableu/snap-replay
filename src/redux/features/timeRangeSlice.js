@@ -5,10 +5,13 @@ import globalConfig from "../../globalConfig";
 
 export const timeRangeSlice = createSlice({
     name: 'timeRangeSlice',
-    initialState: {data: [0, 10]},
+    initialState: {data: [0, 0], real: [0, 0]},
     reducers: {
         setTimeRange: (state, action) => {
-            state.data = action.payload;
+            const {data, real} = action.payload;
+            // console.log("data: ", data, "valMap:", valMap);
+            state.data = data;
+            state.real = real;
             Trace.note("setTimeRange", action.payload);
         },
     },

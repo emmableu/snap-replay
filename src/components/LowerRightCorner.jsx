@@ -22,7 +22,7 @@ const LowerRightCorner = () => {
     const [singleStepping, setSingleStepping] = React.useState(false);
     const isFullProject = useSelector(state => state.isFullProject.data);
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
-    const stride = useSelector(s => s.trace.stride);
+    // const stride = useSelector(s => s.trace.stride);
     const timeRange = useSelector(s => s.timeRange.data);
 
     const handleChangeSwitch = (event) => {
@@ -40,10 +40,10 @@ const LowerRightCorner = () => {
         }
         else {
             if (isFullProject) {
-                replayerAPI.postScript(selectedProject, true, 0, 0, 0).then()
+                replayerAPI.postScript(selectedProject, true, 0, 0).then()
             }
             else {
-                replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride)
+                replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
             }
         }
     }

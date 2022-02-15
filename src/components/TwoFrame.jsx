@@ -28,10 +28,15 @@ const TwoFrame = ( ) => {
     const renderer1 = React.useRef(null);
     const renderer2 = React.useRef(null);
     const timeRange = useSelector(s => s.timeRange.data);
+    const realRange = useSelector(s => s.timeRange.real);
     const dispatch = useDispatch();
-
-    const stride = useSelector(state => state.trace.stride);
+    const [marks, setMarks] = React.useState([]);
+    const [marksFormat, setMarksFormat] = React.useState({});
+    // const [maxMark, setMaxMark] = React.useState(0);
+    // const stride = useSelector(state => state.trace.stride);
     const trace = useSelector(state => state.trace.data);
+    // const [valMap, setValMap] = React.useState({});
+
     const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);
     const calcFrameWidth = (playerPanelContainerWidth) => (
       (playerPanelContainerWidth / 2
@@ -42,6 +47,11 @@ const TwoFrame = ( ) => {
     const minDistance = 1;
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
     const [originalMode, setOriginalMode] = React.useState(false);
+
+
+    React.useEffect(() => {
+        updateMarks(trace);
+    }, [trace])
 
 
     React.useEffect(() => {
@@ -78,12 +88,12 @@ const TwoFrame = ( ) => {
             };
 
             // size somehow gets multiplied by 4 on mac retina displays
-            const width = frameWidth ;
+            const width = frameWidth;
             const height = width * 0.75;
             // console.log("width, height: ", width, height);
             renderer.current.resize(width, height);
             drawStep();
-            replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride)
+            replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
         }
     }, [selectedProject])
 
@@ -91,33 +101,47 @@ const TwoFrame = ( ) => {
         if (!Array.isArray(newValue)) {
             return;
         }
-        if (newValue[1] - newValue[0] < minDistance) {
-            if (activeThumb === 0) {
-                const clamped = Math.min(newValue[0], 100 - minDistance);
-                dispatch(setTimeRange([clamped, clamped + minDistance]));
-            } else {
-                const clamped = Math.max(newValue[1], minDistance);
-                dispatch(setTimeRange([clamped - minDistance, clamped]));
-            }
-            replayer1.current.loadFrame(timeRange[0] * stride);
-            replayer2.current.loadFrame(timeRange[1] * stride);
+        if (timeRange[0] === newValue[0] && timeRange[1] === newValue[1]) return;
+        const real = [];
+        for (const d of newValue) {
+            real.push(parseInt(valMap[d.toString()]));
         }
-        else {
-            dispatch(setTimeRange(newValue));
-            if (activeThumb === 0) {
-                replayer1.current.loadFrame(timeRange[0] * stride);
-            } else {
-                replayer2.current.loadFrame(timeRange[1] * stride);
-            }
+
+        // for (const val of newValue) {
+        //     if (!(markVals.includes(val.toString()))) return;
+        // }
+        if (activeThumb === 0) {
+            replayer1.current.loadFrame(real[0] );
+        } else {
+            replayer2.current.loadFrame(real[1] );
         }
+        dispatch(setTimeRange({data:newValue, real}));
+
+        // if (newValue[1] - newValue[0] < minDistance) {
+        //     if (activeThumb === 0) {
+        //         const clamped = Math.min(newValue[0], 100 - minDistance);
+        //         dispatch(setTimeRange([clamped, clamped + minDistance]));
+        //     } else {
+        //         const clamped = Math.max(newValue[1], minDistance);
+        //         dispatch(setTimeRange([clamped - minDistance, clamped]));
+        //     }
+        //     for (const val of newValue) {
+        //         if (!(markVals.includes(val))) return;
+        //     }
+        //     replayer1.current.loadFrame(timeRange[0] * stride);
+        //     replayer2.current.loadFrame(timeRange[1] * stride);
+        // }
+        // else {
+        //
+        // }
     };
 
     const handleMouseUp = (e, newValue) => {
         if (globalConfig.playerOnly) return;
-        const traceBlocks =  new Set(trace.blocks.slice(newValue[0] * stride, newValue[1] * stride));
+        const traceBlocks =  new Set(trace.blocks.slice(realRange[0] , realRange[1] ));
         window.ide.traceBlocks = traceBlocks;
         if (!originalMode) {
-            replayerAPI.postScript(selectedProject, false, newValue[0], newValue[1], stride)
+            replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
         }
         else {
             window.ide.highlightRunningCode(traceBlocks);
@@ -135,12 +159,73 @@ const TwoFrame = ( ) => {
             )
         }
         else {
-            replayerAPI.postScript(selectedProject, false, timeRange[0], timeRange[1], stride).then(
+            replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1]).then(
                 res => setOriginalMode(false)
             )
         }
     };
+    const keyToMark = (opcode, value, i) => {
+        if (i===undefined) {
+            return {label: `${opcode.toLowerCase()}`, format:`${opcode.toLowerCase()} key pressed`}
+        }
+        let idx;
+        if (i === 0) {idx = "1st"}
+        else if (i === 1) {idx = "2nd"}
+        else if (i === 2) {idx = "3rd"}
+        else {idx = `${i+1}th`}
+        if (opcode === "control_create_clone_of") {
+            return {label: `clone${i+1}`, format: `the ${idx} clone appeared`}
+        }
+        else if (opcode === "control_delete_this_clone") {
+            return {label: `delete${i+1}`, format: `a ${idx} clone deleted`}
+        }
+    }
 
+
+    const updateMarks = (trace) => {
+        const marksLabel = {}
+        const marksFormatRaw = {};
+        for (const op in trace.keyOps) {
+            const stamps = trace.keyOps[op];
+            let i = 0;
+            for (const timeStamp of stamps) {
+                const value = Math.floor(timeStamp);
+                const {label, format} =  keyToMark(op, value, i);
+                // marks.push({value, label});
+                marksLabel[value] = label
+                marksFormatRaw[value] =format;
+                i += 1;
+            }
+        }
+        for (const [i, d] in trace.keysDown.data.entries()) {
+            const value = trace.keyDown.id[i];
+            if (d === "EMPTY") continue;
+            const {label, format} =  keyToMark(d, value);
+            // marks.push({value, label});
+            marksLabel[value] = label
+            marksFormatRaw[value] = format;
+        }
+        const sortedVals = Object.keys(marksLabel).map(m => parseInt(m)).sort(function(a, b) {
+            return a - b;
+        });
+        let marks = [];
+        let shownVal = 0
+        let marksFormat = {};
+        let valMap = {};
+        console.log("sortedVals: ", sortedVals);
+        for (const value of sortedVals) {
+            marks.push({value: shownVal, label: marksLabel[value]})
+            marksFormat[shownVal] = marksFormatRaw[value];
+            valMap[shownVal.toString()] = value;
+            shownVal += 1;
+        }
+        setMarks(marks);
+        setMarksFormat(marksFormat);
+        console.log("marks: ", marks);
+        console.log("marksFormat: ", marksFormat);
+        // console.log("marks: ", marks);
+        return marks
+    }
 
     return (
         <div>
@@ -169,9 +254,13 @@ const TwoFrame = ( ) => {
                 getAriaLabel={() => 'Minimum distance shift'}
                 value={timeRange}
                 onChange={handleChangeTimeSlider}
+                max={trace.vals[trace.vals.length - 1]}
                 onChangeCommitted={handleMouseUp}
                 valueLabelDisplay="auto"
                 disableSwap
+                marks={marks}
+                valueLabelFormat={(num, i) => marksFormat[num]}
+                step={null}
             />
             {/*<Button onClick={showFullCode}>Show Complete Code</Button>*/}
             {
