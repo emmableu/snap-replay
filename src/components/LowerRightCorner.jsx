@@ -23,7 +23,7 @@ const LowerRightCorner = () => {
     const isFullProject = useSelector(state => state.isFullProject.data);
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
     // const stride = useSelector(s => s.trace.stride);
-    const timeRange = useSelector(s => s.timeRange.data);
+    const realRange = useSelector(s => s.timeRange.real);
 
     const handleChangeSwitch = (event) => {
         setSingleStepping(!singleStepping);

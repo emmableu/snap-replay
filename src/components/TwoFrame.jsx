@@ -102,14 +102,9 @@ const TwoFrame = ( ) => {
             return;
         }
         if (timeRange[0] === newValue[0] && timeRange[1] === newValue[1]) return;
-        const real = [];
-        for (const d of newValue) {
-            real.push(parseInt(valMap[d.toString()]));
-        }
-
-        // for (const val of newValue) {
-        //     if (!(markVals.includes(val.toString()))) return;
-        // }
+        console.log("trace.vals: ", trace.vals)
+        const real = newValue.map(v => trace.vals[parseInt(v)])
+        console.log("real: ",real);
         if (activeThumb === 0) {
             replayer1.current.loadFrame(real[0] );
         } else {
@@ -181,51 +176,70 @@ const TwoFrame = ( ) => {
         }
     }
 
-
     const updateMarks = (trace) => {
         const marksLabel = {}
-        const marksFormatRaw = {};
+        const marksFormat = {};
         for (const op in trace.keyOps) {
             const stamps = trace.keyOps[op];
             let i = 0;
             for (const timeStamp of stamps) {
                 const value = Math.floor(timeStamp);
                 const {label, format} =  keyToMark(op, value, i);
-                // marks.push({value, label});
                 marksLabel[value] = label
-                marksFormatRaw[value] =format;
+                marksFormat[value] =format;
                 i += 1;
             }
         }
-        for (const [i, d] in trace.keysDown.data.entries()) {
-            const value = trace.keyDown.id[i];
+        for (const [i, d] of Object.entries(trace.keysDown.data)) {
+            const value = trace.keysDown.id[i];
             if (d === "EMPTY") continue;
             const {label, format} =  keyToMark(d, value);
-            // marks.push({value, label});
             marksLabel[value] = label
-            marksFormatRaw[value] = format;
+            marksFormat[value] = format;
         }
-        const sortedVals = Object.keys(marksLabel).map(m => parseInt(m)).sort(function(a, b) {
-            return a - b;
-        });
-        let marks = [];
-        let shownVal = 0
-        let marksFormat = {};
-        let valMap = {};
-        console.log("sortedVals: ", sortedVals);
-        for (const value of sortedVals) {
-            marks.push({value: shownVal, label: marksLabel[value]})
-            marksFormat[shownVal] = marksFormatRaw[value];
-            valMap[shownVal.toString()] = value;
-            shownVal += 1;
+
+        console.log("marksFormat: ", marksFormat);
+        console.log("marksLabel: ", marksLabel);
+
+        let marks = []
+        for (const [idx, d] of trace.vals.entries()) {
+            if (!d.toString() in marksLabel) {
+                // marks.push({value: idx, label:""})
+                marksFormat[idx] = ""
+            }
+            else {
+                marks.push({value: idx, label: marksLabel[d]})
+            }
         }
         setMarks(marks);
-        setMarksFormat(marksFormat);
-        console.log("marks: ", marks);
-        console.log("marksFormat: ", marksFormat);
-        // console.log("marks: ", marks);
-        return marks
+        setMarksFormat(marksFormat)
+        // setMarksLabel(marksLabel)
     }
+
+
+    // const updateMarks = (trace) => {
+
+    //     const sortedVals = Object.keys(marksLabel).map(m => parseInt(m)).sort(function(a, b) {
+    //         return a - b;
+    //     });
+    //     let marks = [];
+    //     let shownVal = 0
+    //     let marksFormat = {};
+    //     let valMap = {};
+    //     console.log("sortedVals: ", sortedVals);
+    //     for (const value of sortedVals) {
+    //         marks.push({value: shownVal, label: marksLabel[value]})
+    //         marksFormat[shownVal] = marksFormatRaw[value];
+    //         valMap[shownVal.toString()] = value;
+    //         shownVal += 1;
+    //     }
+    //     setMarks(marks);
+    //     setMarksFormat(marksFormat);
+    //     console.log("marks: ", marks);
+    //     console.log("marksFormat: ", marksFormat);
+    //     // console.log("marks: ", marks);
+    //     return marks
+    // }
 
     return (
         <div>
@@ -254,7 +268,7 @@ const TwoFrame = ( ) => {
                 getAriaLabel={() => 'Minimum distance shift'}
                 value={timeRange}
                 onChange={handleChangeTimeSlider}
-                max={trace.vals[trace.vals.length - 1]}
+                max={trace.vals.length - 1}
                 onChangeCommitted={handleMouseUp}
                 valueLabelDisplay="auto"
                 disableSwap

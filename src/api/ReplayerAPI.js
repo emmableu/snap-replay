@@ -1,5 +1,6 @@
 import axiosSpring from "./axiosSpringConfig";
 import axiosExpress from "./axiosExpressConfig";
+import Cookies from "js-cookie";
 import globalConfig from "../globalConfig";
 
 class ReplayerAPI {
@@ -13,7 +14,7 @@ class ReplayerAPI {
     // }
 
     static async postTrace (projectName, trace) {
-        const userId = "wwang33";
+        const userId = Cookies.get("userId");
         const response = await axiosSpring({
             method: 'post',
             url: `/post-trace/${userId}/${projectName}`,
@@ -35,7 +36,7 @@ class ReplayerAPI {
     static async postScript (projectName, isOriginal, start, end) {
         const response = await axiosSpring({
             method: 'post',
-            url: `/post-script/wwang33/${projectName}`,
+            url: `/post-script/${Cookies.get("userId")}/${projectName}`,
             data: {
                 projectName: projectName,
                 isOriginal: isOriginal,

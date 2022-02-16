@@ -1,5 +1,6 @@
 import Util from "./util";
 import {cloneDeep} from "lodash";
+import Cookies from "js-cookie";
 
 
 
@@ -73,13 +74,13 @@ class TraceLogger {
                 changeLst.push(...obj[attribute].id);
             }
         }
-        for (const [opcode, idList] of this.trace.keyOps) {
+        for (const [opcode, idList] of Object.entries(this.trace.keyOps)) {
             changeLst.push(...idList);
         }
-        changeLst.push(...keysDown.id);
+        changeLst.push(...this.trace.keysDown.id);
         changeLst = changeLst.sort((a, b) => a-b);
         const changeSet = new Set(changeLst);
-        this.vals = [...changeSet].sort((a, b) => a - b);
+        this.trace.vals = [...changeSet].sort((a, b) => a - b);
     }
 
 
