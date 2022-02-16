@@ -51,13 +51,13 @@ class TraceLogger {
     addAttributeToDrawable(attributeName, newVal, drawableId) {
         const data = this.trace.drawables[drawableId][attributeName].data;
         let needsUpdate = false;
-        if (attributeName === "posx" || attributeName === "posy") {
-            if (Math.abs(newVal - data[data.length - 1]) > 50) {
-                needsUpdate = true;
-            }
-        }
-        else if (attributeName === "direction") {
-            if (newVal !== data[data.length - 1]) {needsUpdate = true}}
+        if (newVal !== data[data.length - 1]) {needsUpdate = true}
+    // if (attributeName === "posx" || attributeName === "posy") {
+    //         if (Math.abs(newVal - data[data.length - 1]) > 50) {
+    //             needsUpdate = true;
+    //         }
+    //     }
+    //     else if (attributeName === "direction") {
 
         if (needsUpdate) {
             data.push(newVal);
@@ -65,22 +65,22 @@ class TraceLogger {
         }
     }
 
-    transform () {
-        let changeLst = [];
-        for (const [id, obj] of Object.entries(this.trace.drawables)) {
-            for (const attribute of TraceLogger.attributeLst) {
-                if (!obj[attribute]) break;
-                changeLst.push(...obj[attribute].id);
-            }
-        }
-        for (const [opcode, idList] of this.trace.keyOps) {
-            changeLst.push(...idList);
-        }
-        changeLst.push(...keysDown.id);
-        changeLst = changeLst.sort((a, b) => a-b);
-        const changeSet = new Set(changeLst);
-        this.vals = [...changeSet].sort((a, b) => a - b);
-    }
+    // transform () {
+    //     let changeLst = [];
+    //     for (const [id, obj] of Object.entries(this.trace.drawables)) {
+    //         for (const attribute of TraceLogger.attributeLst) {
+    //             if (!obj[attribute]) break;
+    //             changeLst.push(...obj[attribute].id);
+    //         }
+    //     }
+    //     for (const [opcode, idList] of Object.entries(this.trace.keyOps)) {
+    //         changeLst.push(...idList);
+    //     }
+    //     changeLst.push(...this.trace.keysDown.id);
+    //     changeLst = changeLst.sort((a, b) => a-b);
+    //     const changeSet = new Set(changeLst);
+    //     this.trace.vals = [...changeSet].sort((a, b) => a - b);
+    // }
 
 
     logExecutionTrace (blockId, vm, target) {

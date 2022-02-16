@@ -35,6 +35,7 @@ const Player = (props) => {
 
 
     const handleGreenFlag = (e) => {
+        setNextEnabled(false);
         scratch.current.greenFlag();
     }
 
@@ -44,7 +45,6 @@ const Player = (props) => {
 
     const stop = () => {
         scratch.current.stop();
-        scratch.current.traceLogger.transform();
         const trace = scratch.current.traceLogger.trace;
         // const stride = trace.endIdx / 100; no longer use strides
         // const stride = 1;

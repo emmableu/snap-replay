@@ -40,7 +40,7 @@ class ReplayerAPI {
                 projectName: projectName,
                 isOriginal: isOriginal,
                 start: Math.floor(start),
-                end: Math.floor(end),
+                end: Math.floor(end)+1,
             }
         })
         // console.log("post script response: ", response.data);

@@ -19,6 +19,8 @@ import Bisect from "../util/Bisect";
 import globalConfig from "../globalConfig";
 import {setIsFullProject} from "../redux/features/isFullProjectSlice";
 import {setTimeRange} from "../redux/features/timeRangeSlice";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const TwoFrame = ( ) => {
     const frameRef1 = React.useRef(null);
@@ -32,11 +34,11 @@ const TwoFrame = ( ) => {
     const dispatch = useDispatch();
     const [marks, setMarks] = React.useState([]);
     const [marksFormat, setMarksFormat] = React.useState({});
-    // const [maxMark, setMaxMark] = React.useState(0);
-    // const stride = useSelector(state => state.trace.stride);
+    const [maxMark, setMaxMark] = React.useState(0);
     const trace = useSelector(state => state.trace.data);
-    // const [valMap, setValMap] = React.useState({});
-
+    const [valMap, setValMap] = React.useState({});
+    const [loadingOpen, setLoadingOpen] = React.useState(true);
+    const [defaultTimeRange, setDefaultTimeRange] = React.useState([0,1]);
     const playerPanelContainerWidth = useSelector(state => state.rect.data.playerPanelContainerWidth);
     const calcFrameWidth = (playerPanelContainerWidth) => (
       (playerPanelContainerWidth / 2
@@ -46,11 +48,13 @@ const TwoFrame = ( ) => {
     const [frameWidth, setFrameWidth] = React.useState(calcFrameWidth(playerPanelContainerWidth));
     const minDistance = 1;
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
+    const projectStatic = useSelector(state => state.selectedProject.data.static);
     const [originalMode, setOriginalMode] = React.useState(false);
 
 
     React.useEffect(() => {
         updateMarks(trace);
+
     }, [trace])
 
 
@@ -68,7 +72,7 @@ const TwoFrame = ( ) => {
         }
     }, [playerPanelContainerWidth])
 
-    React.useEffect(  () => {
+    React.useEffect( async () => {
         const frameRefs = [frameRef1, frameRef2];
         const replayers = [replayer1, replayer2];
         const renderers = [renderer1, renderer2];
@@ -93,52 +97,84 @@ const TwoFrame = ( ) => {
             // console.log("width, height: ", width, height);
             renderer.current.resize(width, height);
             drawStep();
-            replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
         }
+        replayerAPI.postScript(selectedProject, false, 0, trace.endIdx)
+        // await new Promise(resolve => setTimeout(resolve, 700));
+
     }, [selectedProject])
+
+    React.useEffect(async ()=> {
+        if (maxMark > 0) {
+            setDefaultTimeRange([0, maxMark])
+            dispatch(setTimeRange({data: [0, maxMark], real: [0, trace.endIdx]}))
+            console.log("replayer1.current: ", replayer1.current);
+            for (const i of [2,1,0]) {
+                replayer1.current.loadFrame(0 + i);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                replayer2.current.loadFrame( trace.endIdx - i);
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            renderer1.current.draw();
+            renderer2.current.draw();
+            setLoadingOpen(false);
+        }
+    }, [maxMark])
+
+
+    const getRealFrameId = (selected) => {
+        // selected is one value from the two values
+        const valLst = Object.keys(valMap).map(v => parseInt(v)).sort((a, b) => a - b);
+
+        selected = selected.toString();
+        if (selected in valMap) {
+            return parseInt(valMap[selected])
+        }
+        else {
+            const closestBigger = valLst[Bisect.lb(valLst, selected)];
+            const closestSmaller = closestBigger - projectStatic.stride;
+            const realBigger = valMap[closestBigger];
+            const realSmaller = valMap[closestSmaller];
+            let realSelected = (realBigger - realSmaller) * (selected - closestSmaller)/projectStatic.stride + realSmaller
+            realSelected = Math.floor(realSelected);
+            console.log(selected, closestBigger, closestSmaller,realBigger,realSmaller,realSelected)
+            return realSelected;
+        }
+
+    }
 
     const handleChangeTimeSlider = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
             return;
         }
-        if (timeRange[0] === newValue[0] && timeRange[1] === newValue[1]) return;
-        const real = [];
-        for (const d of newValue) {
-            real.push(parseInt(valMap[d.toString()]));
-        }
+        let real;
 
-        // for (const val of newValue) {
-        //     if (!(markVals.includes(val.toString()))) return;
-        // }
-        if (activeThumb === 0) {
+        if (newValue[1] - newValue[0] < minDistance) {
+            if (activeThumb === 0) {
+                const clamped = Math.min(newValue[0], 100 - minDistance);
+                newValue = [clamped, clamped + minDistance]
+            } else {
+                const clamped = Math.max(newValue[1], minDistance);
+                newValue = [clamped - minDistance, clamped]
+            }
+            real = newValue.map(v => getRealFrameId(v));
             replayer1.current.loadFrame(real[0] );
-        } else {
             replayer2.current.loadFrame(real[1] );
         }
+        else {
+            if (timeRange[0] === newValue[0] && timeRange[1] === newValue[1]) return;
+            real = newValue.map(v => getRealFrameId(v));
+            if (activeThumb === 0) {
+                replayer1.current.loadFrame(real[0] );
+            } else {
+                replayer2.current.loadFrame(real[1] );
+            }
+        }
         dispatch(setTimeRange({data:newValue, real}));
-
-        // if (newValue[1] - newValue[0] < minDistance) {
-        //     if (activeThumb === 0) {
-        //         const clamped = Math.min(newValue[0], 100 - minDistance);
-        //         dispatch(setTimeRange([clamped, clamped + minDistance]));
-        //     } else {
-        //         const clamped = Math.max(newValue[1], minDistance);
-        //         dispatch(setTimeRange([clamped - minDistance, clamped]));
-        //     }
-        //     for (const val of newValue) {
-        //         if (!(markVals.includes(val))) return;
-        //     }
-        //     replayer1.current.loadFrame(timeRange[0] * stride);
-        //     replayer2.current.loadFrame(timeRange[1] * stride);
-        // }
-        // else {
-        //
-        // }
     };
 
     const handleMouseUp = (e, newValue) => {
         if (globalConfig.playerOnly) return;
-        const traceBlocks =  new Set(trace.blocks.slice(realRange[0] , realRange[1] ));
+        const traceBlocks =  new Set(trace.blocks.slice(realRange[0] , realRange[1] + 1 ));
         window.ide.traceBlocks = traceBlocks;
         if (!originalMode) {
             replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
@@ -174,10 +210,10 @@ const TwoFrame = ( ) => {
         else if (i === 2) {idx = "3rd"}
         else {idx = `${i+1}th`}
         if (opcode === "control_create_clone_of") {
-            return {label: `clone${i+1}`, format: `the ${idx} clone appeared`}
+            return {label: <img width="20px" src={"static/"+projectStatic.cloneImg} alt="clone"/>, format: `the ${idx} clone appeared`}
         }
         else if (opcode === "control_delete_this_clone") {
-            return {label: `delete${i+1}`, format: `a ${idx} clone deleted`}
+            return {label: <img width="20px" src={"static/"+projectStatic.cloneCrossImg} alt="delete"/>, format: `a ${idx} clone deleted`}
         }
     }
 
@@ -190,21 +226,29 @@ const TwoFrame = ( ) => {
             let i = 0;
             for (const timeStamp of stamps) {
                 const value = Math.floor(timeStamp);
-                const {label, format} =  keyToMark(op, value, i);
-                // marks.push({value, label});
-                marksLabel[value] = label
-                marksFormatRaw[value] =format;
-                i += 1;
+                if (value <= trace.endIdx) {
+                    const {label, format} =  keyToMark(op, value, i); // usually effect is found a step after this.
+                    // marks.push({value, label});
+                    marksLabel[value] = label
+                    marksFormatRaw[value] =format;
+                    i += 1;
+                }
             }
         }
-        for (const [i, d] in trace.keysDown.data.entries()) {
-            const value = trace.keyDown.id[i];
+        for (const [i, d] of trace.keysDown.data.entries()) {
+            const value = trace.keysDown.id[i];
             if (d === "EMPTY") continue;
-            const {label, format} =  keyToMark(d, value);
             // marks.push({value, label});
-            marksLabel[value] = label
-            marksFormatRaw[value] = format;
+            if (value - 2 > 0) {
+                const {label, format} =  keyToMark(d, value-2);
+                marksLabel[value-2] = label
+                marksFormatRaw[value-2] = format;
+            }
         }
+        marksLabel['0'] = "start";
+        marksLabel['0'] = "start";
+        marksLabel[trace.endIdx] = "end"
+        marksFormatRaw[trace.endIdx] = "end"
         const sortedVals = Object.keys(marksLabel).map(m => parseInt(m)).sort(function(a, b) {
             return a - b;
         });
@@ -217,18 +261,26 @@ const TwoFrame = ( ) => {
             marks.push({value: shownVal, label: marksLabel[value]})
             marksFormat[shownVal] = marksFormatRaw[value];
             valMap[shownVal.toString()] = value;
-            shownVal += 1;
+            shownVal += projectStatic.stride; //e.g., 0, 4, 8, 12 ,...
         }
         setMarks(marks);
+        setValMap(valMap);
+        setMaxMark(shownVal - projectStatic.stride);
         setMarksFormat(marksFormat);
         console.log("marks: ", marks);
+        console.log("valMap: ", valMap);
         console.log("marksFormat: ", marksFormat);
-        // console.log("marks: ", marks);
         return marks
     }
 
     return (
         <div>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: 1000}}
+                open={loadingOpen}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
 
             <div style={{
                 display: "flex",
@@ -242,7 +294,6 @@ const TwoFrame = ( ) => {
                 </canvas>
             </div>
             <div style={{backgroundColor: "#c9c9c9", border: "1px solid #c9c9c9"}}>
-                {/*<div>*/}
                 <canvas
                     ref={frameRef2}
                 >
@@ -250,19 +301,23 @@ const TwoFrame = ( ) => {
             </div>
             </div>
 
-            <Slider
+          <Slider
+                style={{width: playerPanelContainerWidth - 20}}
                 getAriaLabel={() => 'Minimum distance shift'}
                 value={timeRange}
+                defaultValue={defaultTimeRange}
                 onChange={handleChangeTimeSlider}
-                max={trace.vals[trace.vals.length - 1]}
+                max={maxMark}
                 onChangeCommitted={handleMouseUp}
                 valueLabelDisplay="auto"
                 disableSwap
                 marks={marks}
-                valueLabelFormat={(num, i) => marksFormat[num]}
-                step={null}
+                valueLabelFormat={(num, i) => marksFormat[num] ? marksFormat[num]:`\xa0`}
+                step={1}
             />
             {/*<Button onClick={showFullCode}>Show Complete Code</Button>*/}
+            <br/>
+            <br/>
             {
                 !globalConfig.playerOnly &&
                 <FormGroup>

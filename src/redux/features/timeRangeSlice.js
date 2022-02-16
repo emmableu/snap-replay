@@ -5,7 +5,7 @@ import globalConfig from "../../globalConfig";
 
 export const timeRangeSlice = createSlice({
     name: 'timeRangeSlice',
-    initialState: {data: [0, 0], real: [0, 0]},
+    initialState: {data: [0, 1], real: [0, 1]},
     reducers: {
         setTimeRange: (state, action) => {
             const {data, real} = action.payload;

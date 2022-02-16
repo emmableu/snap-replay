@@ -11,6 +11,6 @@ build
 
 # misc
 .DS_Store
-globalConfig.ignore.js
+#globalConfig.ignore.js added it back because it was not correctly ignored to begin with.
 npm-debug.log
 deploy.sh

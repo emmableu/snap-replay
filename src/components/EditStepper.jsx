@@ -47,7 +47,7 @@ export default function EditStepper(props) {
     return (
         <>            {!playerOnly &&
 
-            <div style={{padding: "20px 30px"}}>
+            <div style={{padding: "10px 30px"}}>
             <Tooltip title="Open in new tab">
 
                 <Button
@@ -67,7 +67,7 @@ export default function EditStepper(props) {
             {!playerOnly && <ProjectSelector
                 setActiveStep={setActiveStep}
                 setNextEnabled={setNextEnabled}/>}
-            <div style={{color: "grey", fontStyle: "italic", margin: "10px 50px"}}>
+            <div style={{color: "grey", fontStyle: "italic", margin: "10px 10px", fontSize:15}}>
                 {htmlDescriptions[selectedProject]}
             </div>
 

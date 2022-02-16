@@ -16,14 +16,14 @@ const SCRATCH_KEY = {
  * @type {{SPACE: string, DOWN: string, LEFT: string, ARROW_RIGHT: string, ARROW_DOWN: string, RIGHT: string, ENTER: string, UP: string, ARROW_UP: string, ARROW_LEFT: string}}
  */
 const KEYBOARD_KEY = {
-    SPACE: 'Space',
-    LEFT: 'Left',
+    SPACE: '⎵',
+    LEFT: '←',
     ARROW_LEFT: 'ArrowLeft',
-    UP: 'Up',
+    UP: '↑',
     ARROW_UP: 'ArrowUp',
-    RIGHT: 'Right',
+    RIGHT: '→',
     ARROW_RIGHT: 'ArrowRight',
-    DOWN: 'Down',
+    DOWN: '↓',
     ARROW_DOWN: 'ArrowDown',
     ENTER: 'Enter'
 };
