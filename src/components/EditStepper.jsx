@@ -55,7 +55,7 @@ export default function EditStepper(props) {
                     href=
                         {controlCond?
                             "https://docs.google.com/document/d/e/2PACX-1vTj9XObjv-kiiWJWNoQaw0OvWGWN1cVUM8gLs0zWYzvo926X-37IlXXdRs-zNdHCJ2ktG6jNu1LQocv/pub"
-                            : "about:_blank"
+                            : "https://docs.google.com/document/d/e/2PACX-1vSunV8OV8cVcDn3MEoMuKwtftt8a33NM2fGBC8SFhWRX_NhgC53u3D098TI6iYMWoAQLYyvovoWmB9v/pub"
                         }
                     endIcon={<OutboundIcon/>}>
                 Decompose By Sequence Worksheet

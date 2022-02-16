@@ -44,6 +44,7 @@ function NotebookContainer() {
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen) => () => {
+        Trace.note("toggleNotebookDrawer", newOpen);
         setOpen(newOpen);
     };
 

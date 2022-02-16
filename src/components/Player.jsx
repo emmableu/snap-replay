@@ -35,6 +35,7 @@ const Player = (props) => {
 
 
     const handleGreenFlag = (e) => {
+        Trace.note('clickGreenFlagToPlay', {selectedProject});
         setNextEnabled(false);
         scratch.current.greenFlag();
     }
