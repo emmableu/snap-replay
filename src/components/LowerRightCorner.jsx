@@ -59,7 +59,7 @@ const LowerRightCorner = () => {
             <div style={{
                 position: "absolute",
                 right: "55px",
-                bottom:"100px",
+                bottom: globalConfig.simplifiedInterfaceFor110?50:100,
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
@@ -72,27 +72,30 @@ const LowerRightCorner = () => {
                 </Tooltip>
 
             {!globalConfig.simplifiedInterfaceFor110 &&
+                <>
                 <Tooltip title="Reload">
                 <Fab size="small" onClick={handleReload}><ReplayIcon/></Fab>
             </Tooltip>
+                    <Paper style={{
+                        borderRadius: '50%',
+                        width: 56,
+                        height: 56,
+                        padding: "10px 10px",
+                        backgroundColor: "#E0DFE0",
+                        zIndex: 9,
+                        fontSize: 12,
+                    }}>
+                        <FormGroup sx={{margin:"0px 0px -10px 0px"}}>
+                            <FormControlLabel
+                                originalMode={singleStepping}
+                                onChange={handleChangeSwitch}
+                                control={<Switch />} label=""/>
+                        </FormGroup>
+                        slower
+                    </Paper>
+                </>
             }
-            <Paper style={{
-                borderRadius: '50%',
-                width: 56,
-                height: 56,
-                padding: "10px 10px",
-                backgroundColor: "#E0DFE0",
-                zIndex: 9,
-                fontSize: 12,
-            }}>
-                <FormGroup sx={{margin:"0px 0px -10px 0px"}}>
-                    <FormControlLabel
-                        originalMode={singleStepping}
-                        onChange={handleChangeSwitch}
-                        control={<Switch />} label=""/>
-                </FormGroup>
-                slower
-            </Paper>
+
         <SaveToNotebookButton/>
             </div>
 

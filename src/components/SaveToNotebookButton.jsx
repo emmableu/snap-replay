@@ -39,11 +39,16 @@ const SaveToNotebookButton = () => {
 
     const handleClickSave = () => {
         handleCloseSetNameDialog();
-        setSnackbarOpen(true);
-        dispatch(setExample({
-            _id: exampleId,
-            xml: window.ide.serializer.serialize(window.ide.stage),
-        }));
+        if (globalConfig.simplifiedInterfaceFor110) {
+            window.ide.exportProject(exampleId);
+        }
+        else {
+            setSnackbarOpen(true);
+            dispatch(setExample({
+                _id: exampleId,
+                xml: window.ide.serializer.serialize(window.ide.stage),
+            }));
+        }
     }
 
 
@@ -75,24 +80,29 @@ const SaveToNotebookButton = () => {
                             maxWidth: '100%',
                         }}
                     >
-                        {/*<TextField fullWidth label="Name"*/}
-                        {/*           id="fullWidth"*/}
-                        {/*           onChange={handleChangeTextField}*/}
-                        {/*/>*/}
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Name</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={exampleId}
-                                label="Name"
-                                onChange={handleChangeTextField}
-                            >
-                                {ids.map(_id =>
-                                    <MenuItem value={_id}>{staticData[_id].name}</MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
+                        {
+                            globalConfig.simplifiedInterfaceFor110 ?
+                                <TextField fullWidth label="Name"
+                                           id="fullWidth"
+                                           onChange={handleChangeTextField}
+                                />
+                                :
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Name</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={exampleId}
+                                        label="Name"
+                                        onChange={handleChangeTextField}
+                                    >
+                                        {ids.map(_id =>
+                                            <MenuItem value={_id}>{staticData[_id].name}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                        }
+
                     </Box>
                 </DialogContent>
                 <DialogActions>

@@ -41,7 +41,9 @@ function App() {
                                     globalConfig.controlCond ||
                                     activeStep === 1 )
                                     && <LowerRightCorner/>}
-                                <NotebookContainer/>
+                                {!globalConfig.simplifiedInterfaceFor110 &&
+                                    <NotebookContainer/>
+                                }
                             </>
                             : <LoginPage/>
 
