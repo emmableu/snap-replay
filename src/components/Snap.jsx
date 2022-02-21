@@ -69,7 +69,10 @@ const Snap = (props) => {
             if (typeof e.data === "string") {
                 const data = JSON.parse(e.data);
                 if ("snapXml" in data) {
-                    setSnapXml(data.snapXml)
+                    setSnapXml(data.snapXml);
+                }
+                else if ("logInfo" in data) {
+                    Trace.csc110Note(data.logInfo);
                 }
             }
         } catch(e) {

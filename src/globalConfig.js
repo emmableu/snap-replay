@@ -67,6 +67,14 @@ Logger.prototype.note = function (msg, data) {
     this.log(messageStarter + "." + msg, data);
 }
 
+
+Logger.prototype.csc110Note = function (obj) {
+    const {msg, data} = obj;
+    console.log("csc110Note: ", msg, data)
+    let messageStarter = "csc110";
+    this.log(messageStarter + "." + msg, data);
+}
+
 Object.freeze(globalConfig);
 
 export default globalConfig;
