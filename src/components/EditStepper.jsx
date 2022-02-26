@@ -45,24 +45,26 @@ export default function EditStepper(props) {
     }
 
     return (
-        <>            {!playerOnly &&
+        <>
+        {/*    */}
+        {/*    {!playerOnly &&*/}
 
-            <div style={{padding: "10px 30px"}}>
-            <Tooltip title="Open in new tab">
+        {/*    <div style={{padding: "10px 30px"}}>*/}
+        {/*    <Tooltip title="Open in new tab">*/}
 
-                <Button
-                    target="_blank"
-                    href=
-                        {controlCond?
-                            "https://docs.google.com/document/d/e/2PACX-1vTj9XObjv-kiiWJWNoQaw0OvWGWN1cVUM8gLs0zWYzvo926X-37IlXXdRs-zNdHCJ2ktG6jNu1LQocv/pub"
-                            : "https://docs.google.com/document/d/e/2PACX-1vSunV8OV8cVcDn3MEoMuKwtftt8a33NM2fGBC8SFhWRX_NhgC53u3D098TI6iYMWoAQLYyvovoWmB9v/pub"
-                        }
-                    endIcon={<OutboundIcon/>}>
-                Decompose By Sequence Worksheet
-            </Button>
-            </Tooltip>
-            </div>
-        }
+        {/*        <Button*/}
+        {/*            target="_blank"*/}
+        {/*            href=*/}
+        {/*                {controlCond?*/}
+        {/*                    "https://docs.google.com/document/d/e/2PACX-1vTj9XObjv-kiiWJWNoQaw0OvWGWN1cVUM8gLs0zWYzvo926X-37IlXXdRs-zNdHCJ2ktG6jNu1LQocv/pub"*/}
+        {/*                    : "https://docs.google.com/document/d/e/2PACX-1vSunV8OV8cVcDn3MEoMuKwtftt8a33NM2fGBC8SFhWRX_NhgC53u3D098TI6iYMWoAQLYyvovoWmB9v/pub"*/}
+        {/*                }*/}
+        {/*            endIcon={<OutboundIcon/>}>*/}
+        {/*        Decompose By Sequence Worksheet*/}
+        {/*    </Button>*/}
+        {/*    </Tooltip>*/}
+        {/*    </div>*/}
+        {/*}*/}
 
             {!playerOnly && <ProjectSelector
                 setActiveStep={setActiveStep}

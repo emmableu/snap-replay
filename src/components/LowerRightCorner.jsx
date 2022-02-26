@@ -78,8 +78,8 @@ const LowerRightCorner = () => {
             </Tooltip>
                     <Paper style={{
                         borderRadius: '50%',
-                        width: 56,
-                        height: 56,
+                        width: 35,
+                        height: 35,
                         padding: "10px 10px",
                         backgroundColor: "#E0DFE0",
                         zIndex: 9,
@@ -96,7 +96,9 @@ const LowerRightCorner = () => {
                 </>
             }
 
-        <SaveToNotebookButton/>
+                {globalConfig.simplifiedInterfaceFor110 &&
+                    <SaveToNotebookButton/>
+                }
             </div>
 
         </>
