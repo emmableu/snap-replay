@@ -15,6 +15,11 @@ const staticDataObj = {
         cloneImg: "tree.png",
         cloneCrossImg: "tree-cross.png",
         stride: 6,
+    },
+    "space": {
+        cloneImg: "space.png",
+        cloneCrossImg: "space-cross.png",
+        stride: 6,
     }
 }
 
@@ -22,9 +27,9 @@ export const selectedProjectSlice = createSlice({
     name: 'selectedProjectSlice',
     initialState: {
         data: {
-            selected: globalConfig.originalSelectedProject ? globalConfig.originalSelectedProject : "panda",
+            selected: globalConfig.originalSelectedProject ? globalConfig.originalSelectedProject : "space",
             static: globalConfig.originalSelectedProject ? staticDataObj[globalConfig.originalSelectedProject]:
-                staticDataObj["panda"]
+                staticDataObj["space"]
         }
     },
     reducers: {

@@ -12,9 +12,10 @@ const ProjectSelector = (props) => {
     const selectedProject = useSelector(state => state.selectedProject.data.selected);
     const dispatch = useDispatch();
     const projectSelections = {
-        "panda": "Panda Eats Bamboos",
-        "shoot": "Shoot a Star",
-        "skiing": "Skiing Cat",
+        // "panda": "Panda Eats Bamboos",
+        // "shoot": "Shoot a Star",
+        // "skiing": "Skiing Cat",
+        "space": "Space Invaders",
     };
 
 

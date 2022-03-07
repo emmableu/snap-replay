@@ -41,7 +41,12 @@ export default function EditStepper(props) {
         shoot:
             (<p>Shoot the star using the space key.<br/>Game ends when the star hits the gun, or when the star is out of the stage.  </p>),
         skiing:
-            (<p>Use left/right arrow to control the cat and to avoid hitting the tree.<br/>When the cat hits the tree, game ends. </p>)
+            (<p>Use left/right arrow to control the cat and to avoid hitting the tree.<br/>When the cat hits the tree, game ends. </p>),
+        space:
+            (<p>Use left/right arrow to control the player.<br/>
+                When pressing the space key, a bullet shoots out of the player.<br/>
+                When all of the enemies are destroyed, you win.
+            </p>),
     }
 
     return (
