@@ -91,8 +91,9 @@ class TraceLogger {
         this.trace.endIdx = this.curId;
         this.trace.blocks.push(blockId);
 
-        if (block.opcode in this.trace.keyOps) {
-            this.trace.keyOps[block.opcode].push(this.curId);
+        if (block.id in this.trace.keyOps) {
+            // console.log("block: ", block);
+            this.trace.keyOps[block.id].push(this.curId);
         }
 
         let keysDown;
@@ -208,7 +209,13 @@ class TraceLogger {
             drawables: {},
             blocks: [],
             keysDown: {data: [], id: []},
-            keyOps: {"control_create_clone_of":[], "control_delete_this_clone": []},
+            // keyOps: {"control_create_clone_of":[], "control_delete_this_clone": []},
+            keyOps: {
+                "=g2b@M,XxwDxqe4_$:Hl": [],
+                "s1wJp3H4E:dH*TPi;rrW": [],
+                "0zE@EITM`:OjYpS]M6}m": [],
+                "2`J9WMb[RASJq66]X}!h": [],
+            },
             endIdx: -1,
             vals: [],
         };

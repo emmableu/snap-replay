@@ -17,9 +17,11 @@ const staticDataObj = {
         stride: 6,
     },
     "space": {
-        cloneImg: "space.png",
-        cloneCrossImg: "space-cross.png",
-        stride: 6,
+        enemyImg: "enemy.png",
+        enemyCrossImg: "enemy-cross.png",
+        bulletImg: "space-bullet.png",
+        bulletCrossImg: "space-bullet-cross.png",
+        stride: 2,
     }
 }
 

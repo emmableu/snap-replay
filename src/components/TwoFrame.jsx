@@ -209,11 +209,25 @@ const TwoFrame = ( ) => {
         else if (i === 1) {idx = "2nd"}
         else if (i === 2) {idx = "3rd"}
         else {idx = `${i+1}th`}
-        if (opcode === "control_create_clone_of") {
-            return {label: <img width="20px" src={"static/"+projectStatic.cloneImg} alt="clone"/>, format: `the ${idx} clone appeared`}
+
+        const idMap =  {
+            "=g2b@M,XxwDxqe4_$:Hl": {name: "deleteEnemy", img: projectStatic.enemyCrossImg, format: "an enemy clone is deleted"},
+            "s1wJp3H4E:dH*TPi;rrW": { name: "deleteBullet", img: projectStatic.bulletCrossImg, format: "a bullet clone is deleted"},
+            "0zE@EITM`:OjYpS]M6}m": { name: "createEnemy", img: projectStatic.enemyImg, format: "an enemy clone is created"},
+            "2`J9WMb[RASJq66]X}!h": { name: "createBullet", img: projectStatic.bulletImg, format: "a bullet clone is created"},
         }
-        else if (opcode === "control_delete_this_clone") {
-            return {label: <img width="20px" src={"static/"+projectStatic.cloneCrossImg} alt="delete"/>, format: `a ${idx} clone deleted`}
+
+        // if (opcode === "control_create_clone_of") {
+        //     return {label: <img width="20px" src={"static/"+projectStatic.cloneImg} alt="clone"/>, format: `the ${idx} clone appeared`}
+        // }
+        // else if (opcode === "control_delete_this_clone") {
+        //     return {label: <img width="20px" src={"static/"+projectStatic.cloneCrossImg} alt="delete"/>, format: `a ${idx} clone deleted`}
+        // }
+        // add hack for spaceinvader project
+        if (opcode in idMap) {
+            return {
+                label: <img width="20px" src={"static/"+idMap[opcode].img} alt={idMap[opcode].name} />, format: idMap[opcode].format
+            }
         }
     }
 
