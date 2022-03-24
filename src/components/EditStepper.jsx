@@ -38,6 +38,8 @@ export default function EditStepper(props) {
     const htmlDescriptions = {
         panda:
             (<p>Use arrow keys to control panda movement.<br/>When the panda eats all bamboos, you win. </p>),
+        boat:
+            (<p>Use arrow keys to control boat movement.</p>),
         shoot:
             (<p>Shoot the star using the space key.<br/>Game ends when the star hits the gun, or when the star is out of the stage.  </p>),
         skiing:
@@ -46,6 +48,10 @@ export default function EditStepper(props) {
             (<p>Use left/right arrow to control the player.<br/>
                 When pressing the space key, a bullet shoots out of the player.<br/>
                 When all of the enemies are destroyed, you win.
+            </p>),
+        catch:
+            (<p>Use left/right arrow to change direction of the controller.<br/>
+                Play with the code to see what happens when the color of the dot matches/doesn't match the controller.<br/>
             </p>),
     }
 

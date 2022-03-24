@@ -215,6 +215,8 @@ const TwoFrame = ( ) => {
             "s1wJp3H4E:dH*TPi;rrW": { name: "deleteBullet", img: projectStatic.bulletCrossImg, format: "a bullet clone is deleted"},
             "0zE@EITM`:OjYpS]M6}m": { name: "createEnemy", img: projectStatic.enemyImg, format: "an enemy clone is created"},
             "2`J9WMb[RASJq66]X}!h": { name: "createBullet", img: projectStatic.bulletImg, format: "a bullet clone is created"},
+            "q6(TdOe}f)j#t-_M|H?h": { name: "createBullet2", img: projectStatic.createBullet2, format: "a bullet2 clone is created"},
+            "h]TK/]-!CcU6N@`m`AcE": { name: "deleteBullet2", img: projectStatic.deleteBullet2, format: "a bullet2 clone is deleted"},
         }
 
         // if (opcode === "control_create_clone_of") {

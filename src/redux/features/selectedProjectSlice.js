@@ -21,7 +21,15 @@ const staticDataObj = {
         enemyCrossImg: "enemy-cross.png",
         bulletImg: "space-bullet.png",
         bulletCrossImg: "space-bullet-cross.png",
+        createBullet2: "create-bullet2.png",
+        deleteBullet2: "delete-bullet2.png",
         stride: 2,
+    },
+    "boat": {
+        stride: 2,
+    },
+    "catch": {
+        stride: 10,
     }
 }
 

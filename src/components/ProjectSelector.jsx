@@ -16,6 +16,8 @@ const ProjectSelector = (props) => {
         // "shoot": "Shoot a Star",
         // "skiing": "Skiing Cat",
         "space": "Space Invaders",
+        "catch": "Catch the Dot",
+        "boat": "Boat Race",
     };
 
 

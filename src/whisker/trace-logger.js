@@ -95,6 +95,11 @@ class TraceLogger {
             // console.log("block: ", block);
             this.trace.keyOps[block.id].push(this.curId);
         }
+        // deletee later
+        else {
+            console.log("block: ", block.opcode)
+            console.log("block.id: ", block.id)
+        }
 
         let keysDown;
         let keysDownList = target.runtime.ioDevices.keyboard._keysPressed;
@@ -215,6 +220,8 @@ class TraceLogger {
                 "s1wJp3H4E:dH*TPi;rrW": [],
                 "0zE@EITM`:OjYpS]M6}m": [],
                 "2`J9WMb[RASJq66]X}!h": [],
+                "q6(TdOe}f)j#t-_M|H?h": [],
+                "h]TK/]-!CcU6N@`m`AcE": [],
             },
             endIdx: -1,
             vals: [],
