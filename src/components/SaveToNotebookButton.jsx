@@ -44,12 +44,11 @@ const SaveToNotebookButton = () => {
 
     const handleClickSave = () => {
         handleCloseSetNameDialog();
-        // setSnackbarOpen(true);
-        // dispatch(setExample({
-        //     _id: exampleId,
-        //     xml: window.ide.serializer.serialize(window.ide.stage),
-        // }));
-        window.ide.exportProject(exampleId);
+        setSnackbarOpen(true);
+        dispatch(setExample({
+            _id: exampleId,
+            xml: window.ide.serializer.serialize(window.ide.stage),
+        }));
     }
 
 
