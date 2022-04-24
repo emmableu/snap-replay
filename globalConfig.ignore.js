@@ -18,6 +18,7 @@ const globalConfigIgnore = {
      axiosExpressBaseURL: "https://isnap.csc.ncsu.edu/node/",
      // axiosExpressBaseURL: "http://localhost:9090/",
      axiosSpringBaseURL: "https://isnap.csc.ncsu.edu/servlet/service/",
+     ideaServerBaseUrl: "https://isnap.csc.ncsu.edu/idea-server/",
      // axiosSpringBaseURL: "http://localhost:8082/",
 }
 

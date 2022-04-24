@@ -15,6 +15,9 @@ import {useDispatch, useSelector} from "react-redux";
 import * as UUID from "uuid";
 import globalConfig from "../globalConfig";
 import Snackbar from "@mui/material/Snackbar";
+import replayerAPI from "../api/ReplayerAPI";
+import Cookies from "js-cookie";
+
 
 const SaveToNotebookButton = () => {
     const dispatch = useDispatch();
@@ -45,10 +48,15 @@ const SaveToNotebookButton = () => {
     const handleClickSave = () => {
         handleCloseSetNameDialog();
         setSnackbarOpen(true);
-        dispatch(setExample({
-            _id: exampleId,
-            xml: window.ide.serializer.serialize(window.ide.stage),
-        }));
+        // dispatch(setExample({
+        //     _id: exampleId,
+        //     xml: window.ide.serializer.serialize(window.ide.stage),
+        // }));
+        replayerAPI.saveCurrentProgram({
+            userId: Cookies.get('userId'),
+            storyboardId: UUID.v4(),
+            storyboardName: exampleId, projectXml: window.ide.serializer.serialize(window.ide.stage),
+        }).then();
     }
 
 
@@ -81,28 +89,32 @@ const SaveToNotebookButton = () => {
                             maxWidth: '100%',
                         }}
                     >
-                        {
-                            globalConfig.simplifiedInterfaceFor110 ?
-                                <TextField fullWidth label="Name"
-                                           id="fullWidth"
-                                           onChange={handleChangeTextField}
-                                />
-                                :
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Name</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={exampleId}
-                                        label="Name"
-                                        onChange={handleChangeTextField}
-                                    >
-                                        {ids.map(_id =>
-                                            <MenuItem value={_id}>{staticData[_id].name}</MenuItem>
-                                        )}
-                                    </Select>
-                                </FormControl>
-                        }
+                        <TextField fullWidth label="Name"
+                                   id="fullWidth"
+                                   onChange={handleChangeTextField}
+                        />
+                        {/*{*/}
+                        {/*    globalConfig.simplifiedInterfaceFor110 ?*/}
+                        {/*        <TextField fullWidth label="Name"*/}
+                        {/*                   id="fullWidth"*/}
+                        {/*                   onChange={handleChangeTextField}*/}
+                        {/*        />*/}
+                        {/*        :*/}
+                        {/*        <FormControl fullWidth>*/}
+                        {/*            <InputLabel id="demo-simple-select-label">Name</InputLabel>*/}
+                        {/*            <Select*/}
+                        {/*                labelId="demo-simple-select-label"*/}
+                        {/*                id="demo-simple-select"*/}
+                        {/*                value={exampleId}*/}
+                        {/*                label="Name"*/}
+                        {/*                onChange={handleChangeTextField}*/}
+                        {/*            >*/}
+                        {/*                {ids.map(_id =>*/}
+                        {/*                    <MenuItem value={_id}>{staticData[_id].name}</MenuItem>*/}
+                        {/*                )}*/}
+                        {/*            </Select>*/}
+                        {/*        </FormControl>*/}
+                        {/*}*/}
 
                     </Box>
                 </DialogContent>

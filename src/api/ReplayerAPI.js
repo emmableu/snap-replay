@@ -1,5 +1,7 @@
 import axiosSpring from "./axiosSpringConfig";
 import axiosExpress from "./axiosExpressConfig";
+import axiosPython from "./ideaServerAxiosConfig";
+
 import globalConfig from "../globalConfig";
 
 class ReplayerAPI {
@@ -11,6 +13,16 @@ class ReplayerAPI {
     //     })
     //     return response;
     // }
+    static async saveCurrentProgram(obj) {
+        // obj: { userId: any; storyboardId: any; storyboardName: string; projectXml: any; }
+        console.log("saveCurrentProgram: ", obj);
+        const response = await axiosPython({
+            method: 'post',
+            url: `/save_current_program`,
+            data: obj,
+        })
+        return response.data;
+    }
 
     static async postTrace (projectName, trace) {
         const userId = "wwang33";
