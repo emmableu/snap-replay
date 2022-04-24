@@ -96,9 +96,9 @@ const LowerRightCorner = () => {
                 </>
             }
 
-                {globalConfig.simplifiedInterfaceFor110 &&
+                {/*{globalConfig.simplifiedInterfaceFor110 &&*/}
                     <SaveToNotebookButton/>
-                }
+                {/*}*/}
             </div>
 
         </>

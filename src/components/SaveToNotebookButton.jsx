@@ -44,11 +44,12 @@ const SaveToNotebookButton = () => {
 
     const handleClickSave = () => {
         handleCloseSetNameDialog();
-        setSnackbarOpen(true);
-        dispatch(setExample({
-            _id: exampleId,
-            xml: window.ide.serializer.serialize(window.ide.stage),
-        }));
+        // setSnackbarOpen(true);
+        // dispatch(setExample({
+        //     _id: exampleId,
+        //     xml: window.ide.serializer.serialize(window.ide.stage),
+        // }));
+        window.ide.exportProject(exampleId);
     }
 
 
@@ -59,7 +60,8 @@ const SaveToNotebookButton = () => {
     return (
         <>
             <div>
-                <Tooltip title={globalConfig.simplifiedInterfaceFor110? "Export":"Save to Notebook"}>
+                <Tooltip title="Save to My Examples">
+                {/*<Tooltip title={globalConfig.simplifiedInterfaceFor110? "Export":"Save to Notebook"}>*/}
                 <Fab size="small" onClick={handleClickFab}><DownloadIcon/></Fab>
                 </Tooltip>
             </div>
