@@ -49,11 +49,12 @@
     "classnames": "^2.3.1",
     "copy-webpack-plugin": "6",
     "js-cookie": "^3.0.1",
-    "lodash": "^4.17.21",
+    "konva": "^7.2.5",
     "preact": "^10.6.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.4",
+    "react-konva": "^17.0.2-6",
     "react-redux": "^7.2.6",
     "regenerator-runtime": "^0.11.1",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
@@ -65,6 +66,7 @@
     "scratchblocks": "^3.5.2",
     "stream-browserify": "^3.0.0",
     "unzipit": "^1.3.6",
+    "use-image": "^1.0.6",
     "uuid": "^8.3.2",
     "wav-encoder": "^1.3.0"
   }

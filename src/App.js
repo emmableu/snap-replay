@@ -10,6 +10,8 @@ import globalConfig from "./globalConfig";
 import TitleBar from "./components/TitleBar";
 import LoginPage from "./components/LoginPage";
 import LowerRightCorner from "./components/LowerRightCorner";
+import FrameList from "./components/FrameList/FrameList";
+import FrameListContainer from "./components/FrameList/FrameListContainer";
 
 function App() {
     const userId = useSelector(s => s.userId.data);
@@ -33,7 +35,10 @@ function App() {
                                             panelHeight={"100vh"}
                                         >
                                             <EditStepper activeStep={activeStep} setActiveStep={setActiveStep}/>
-                                            <Snap activeStep={globalConfig.controlCond? 1:activeStep} />
+                                            <>
+                                                <FrameListContainer/>
+                                                <Snap activeStep={globalConfig.controlCond? 1:activeStep} />
+                                            </>
                                         </ResizablePanels>
                                     </>
                                 }
