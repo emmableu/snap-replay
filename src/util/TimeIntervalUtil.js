@@ -8,7 +8,7 @@ class TimeIntervalUtil  {
     static getRealFrameId = (selected, valMap, stride) => {
         // selected is one value from the two values
         const valLst = Object.keys(valMap).map(v => parseInt(v)).sort((a, b) => a - b);
-        console.log("valLst: ", valLst, "valMap: ", valMap);
+        // console.log("valLst: ", valLst, "valMap: ", valMap);
         selected = selected.toString();
         if (selected in valMap) {
             return parseInt(valMap[selected])
@@ -67,20 +67,22 @@ class TimeIntervalUtil  {
             }
         }
         let starList = []
+        // console.log('trace: ', trace);
+        // console.log("trace.drawables: ", trace.drawables);
         for (const [id, obj] of Object.entries(trace.drawables)) {
             if (frameId > obj.endIdx) continue;
             let rawStarObj = {}
             let isValidStar = true;
             for (const attribute of TraceLogger.attributeLst) {
                 if (obj[attribute] === undefined ||
-                    obj[attribute] === null ||
-                    obj['visible'] === false
+                    obj[attribute] === null
                 ) {isValidStar = false;break;}
-                // console.log("obj['visible']: ", obj.visible)
-                // if a drawable entry doesn't even have these attributes,
-                // then the drawable doesn't exist.
+
                 const idx = Bisect.ub(obj[attribute].id, frameId);
                 if (idx === -1) {isValidStar = false;break;}
+                if (attribute === 'visible') {
+                    if (!obj[attribute].data[idx])  {isValidStar = false;break;}
+                }
                 rawStarObj[attribute] = obj[attribute].data[idx];
             }
             if (!isValidStar) continue;
@@ -110,7 +112,6 @@ class TimeIntervalUtil  {
                 "motionStarList": []
             }
         }
-        console.log("getStarObj res: ", res);
         return res;
     }
 

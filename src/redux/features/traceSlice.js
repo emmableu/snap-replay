@@ -13,7 +13,7 @@ export const traceSlice = createSlice({
     reducers: {
         setTrace: (state, action) => {
             state.data = action.payload;
-            console.log("setTrace: ", state.data)
+            // console.log("setTrace: ", state.data)
             Trace.note("setTrace", action.payload);
         },
         // setFrameListData: (state, action) => {
@@ -23,7 +23,7 @@ export const traceSlice = createSlice({
         // },
         setStride: (state, action) => {
             state.stride = action.payload;
-            console.log("setStride: ", state.stride);
+            // console.log("setStride: ", state.stride);
             Trace.note("setStride", action.payload);
         },
         // setValMap: (state, action) => {
@@ -34,9 +34,9 @@ export const traceSlice = createSlice({
         setStoryboardFrameList: (state, action) => {
             const {timeRange, projectName, valMap} = action.payload;
             state.frameList =  TimeIntervalUtil.sampleStoryboard(
-                state.data, timeRange, valMap, projectName
+                JSON.parse(JSON.stringify(state.data)), timeRange, valMap, projectName
             )
-            console.log("setStoryboardFrameList: ", state.frameList);
+            // console.log("setStoryboardFrameList: ", state.frameList);
             Trace.note("setStoryboardFrameList", action.payload);
         }
     }

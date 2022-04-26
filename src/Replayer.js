@@ -71,7 +71,7 @@ export class Replayer {
         console.log("loadFrame: ", frameId);
         if (frameId >= this.trace.endIdx) return;
         let drawables = this.getCurFrameDrawables(frameId, this.trace);
-        console.log("drawables: ", drawables);
+        // console.log("drawables: ", drawables);
         const curFrameDrawableSet = new Set(drawables.map(d => d.id));
         this.prevFrameDrawableSet.forEach((oldId) => {
             if (!curFrameDrawableSet.has(oldId)) {
@@ -81,7 +81,7 @@ export class Replayer {
             }
         })
         this.prevFrameDrawableSet = curFrameDrawableSet;
-        console.log("-------------------------------- frameId: ", frameId);
+        // console.log("-------------------------------- frameId: ", frameId);
         drawables.forEach(d => {
             let drawableId = this.drawableMap[d.id];
             let bitMapSkinId = this.costumeMap[d.skinId];
