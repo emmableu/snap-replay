@@ -21,7 +21,7 @@ const Player = (props) => {
             scratch.current.stop();
         }
         else {
-            scratch.current = new ScratchStage(playerRef.current);
+            scratch.current = new ScratchStage(playerRef.current, selectedProject);
             window.scratch = scratch.current;
         }
         const width = playerPanelContainerWidth / window.devicePixelRatio;
@@ -53,6 +53,7 @@ const Player = (props) => {
             ReplayerAPI.postTrace(selectedProject, trace.blocks).then(
                 res => {
                     dispatch(setTrace({...trace}));
+                    // dispatch(setF rameListData(frameListData));
                     // dispatch(setStride(stride));
                     scratch.current.clearTrace();
                     setNextEnabled(true);
@@ -61,6 +62,7 @@ const Player = (props) => {
         }
         else {
             dispatch(setTrace({...trace}));
+            // dispatch(setFrameListData(frameListData));
             // dispatch(setStride(stride));
             scratch.current.clearTrace();
             setNextEnabled(true);

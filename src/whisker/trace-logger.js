@@ -1,6 +1,6 @@
 import Util from "./util";
-import {cloneDeep} from "lodash";
-
+import Bisect from "../util/Bisect";
+import axios from "../api/axiosSpringConfig";
 
 
 let threadPreparedForCoverage = false;
@@ -11,7 +11,7 @@ let threadPreparedForCoverage = false;
  */
 class TraceLogger {
 
-    constructor() {
+    constructor(projectName) {
         this.clearTrace();
         this.ignoreOpcodes = new Set([
             "control_if", // "if" BoolExpr "then" StmtList
@@ -20,6 +20,8 @@ class TraceLogger {
             "control_repeat_until", // "until" BoolExpr "repeat" StmtList
             "control_forever", //"repeat" "forever" StmtList
         ]);
+        // this.projectName = projectName.replace(" ", "%20");
+        // this.path = axios.defaults.baseURL + `project/${projectName}/`;
     }
 
     // static attributeLst = ["posx", "posy", "skinId",
@@ -97,8 +99,8 @@ class TraceLogger {
         }
         // deletee later
         else {
-            console.log("block: ", block.opcode)
-            console.log("block.id: ", block.id)
+            // console.log("block: ", block.opcode)
+            // console.log("block.id: ", block.id)
         }
 
         let keysDown;
@@ -227,6 +229,7 @@ class TraceLogger {
             vals: [],
         };
         this.curId = -1;
+        // this.frameList = [];
     }
 
 }

@@ -6,11 +6,13 @@ import globalConfig from "../../globalConfig";
 
 const BackdropStar = (props) => {
     const {_id, prototypeId, backdropWidth} = props;
-    const [imgSrc, setImgSrc] = React.useState(axios.defaults.baseURL + prototypeId);
+    // const [imgSrc, setImgSrc] = React.useState(axios.defaults.baseURL + prototypeId);
+    const [imgSrc, setImgSrc] = React.useState( prototypeId);
     let [image] = useImage(imgSrc);
     React.useEffect( () => {
             // globalLog("img src updated: ", axios.defaults.baseURL + prototypeId)
-            setImgSrc(axios.defaults.baseURL + prototypeId);
+            setImgSrc( prototypeId);
+            // setImgSrc(axios.defaults.baseURL + prototypeId);
         }
         , [_id]
     )

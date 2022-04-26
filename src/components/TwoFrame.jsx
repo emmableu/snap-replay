@@ -21,6 +21,8 @@ import {setIsFullProject} from "../redux/features/isFullProjectSlice";
 import {setTimeRange} from "../redux/features/timeRangeSlice";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import {setStoryboardFrameList} from "../redux/features/traceSlice";
+import TimeIntervalUtil from "../util/TimeIntervalUtil";
 
 const TwoFrame = ( ) => {
     const frameRef1 = React.useRef(null);
@@ -36,6 +38,7 @@ const TwoFrame = ( ) => {
     const [marksFormat, setMarksFormat] = React.useState({});
     const [maxMark, setMaxMark] = React.useState(0);
     const trace = useSelector(state => state.trace.data);
+    // const valMap = useSelector(state => state.trace.valMap);
     const [valMap, setValMap] = React.useState({});
     const [loadingOpen, setLoadingOpen] = React.useState(true);
     const [defaultTimeRange, setDefaultTimeRange] = React.useState([0,1]);
@@ -121,26 +124,7 @@ const TwoFrame = ( ) => {
     }, [maxMark])
 
 
-    const getRealFrameId = (selected) => {
-        // selected is one value from the two values
-        const valLst = Object.keys(valMap).map(v => parseInt(v)).sort((a, b) => a - b);
 
-        selected = selected.toString();
-        if (selected in valMap) {
-            return parseInt(valMap[selected])
-        }
-        else {
-            const closestBigger = valLst[Bisect.lb(valLst, selected)];
-            const closestSmaller = closestBigger - projectStatic.stride;
-            const realBigger = valMap[closestBigger];
-            const realSmaller = valMap[closestSmaller];
-            let realSelected = (realBigger - realSmaller) * (selected - closestSmaller)/projectStatic.stride + realSmaller
-            realSelected = Math.floor(realSelected);
-            console.log(selected, closestBigger, closestSmaller,realBigger,realSmaller,realSelected)
-            return realSelected;
-        }
-
-    }
 
     const handleChangeTimeSlider = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
@@ -156,13 +140,13 @@ const TwoFrame = ( ) => {
                 const clamped = Math.max(newValue[1], minDistance);
                 newValue = [clamped - minDistance, clamped]
             }
-            real = newValue.map(v => getRealFrameId(v));
+            real = newValue.map(v => TimeIntervalUtil.getRealFrameId(v, valMap, projectStatic.stride));
             replayer1.current.loadFrame(real[0] );
             replayer2.current.loadFrame(real[1] );
         }
         else {
             if (timeRange[0] === newValue[0] && timeRange[1] === newValue[1]) return;
-            real = newValue.map(v => getRealFrameId(v));
+            real = newValue.map(v => TimeIntervalUtil.getRealFrameId(v, valMap, projectStatic.stride));
             if (activeThumb === 0) {
                 replayer1.current.loadFrame(real[0] );
             } else {
@@ -176,6 +160,7 @@ const TwoFrame = ( ) => {
         if (globalConfig.playerOnly) return;
         const traceBlocks =  new Set(trace.blocks.slice(realRange[0] , realRange[1] + 1 ));
         window.ide.traceBlocks = traceBlocks;
+        dispatch(setStoryboardFrameList({timeRange, projectName: selectedProject, valMap}));
         if (!originalMode) {
             replayerAPI.postScript(selectedProject, false, realRange[0], realRange[1])
         }

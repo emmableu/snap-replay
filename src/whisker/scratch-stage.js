@@ -16,11 +16,11 @@ const PROJECT_SERVER = 'https://cdn.projects.scratch.mit.edu';
  * <canvas></canvas>
  */
 class ScratchStage extends EventEmitter {
-    constructor (canvas) {
+    constructor (canvas, projectName) {
         super();
         this.canvas = canvas;
         this.vm = ScratchStage.prepareVM(this.canvas);
-        this.traceLogger = new TraceLogger();
+        this.traceLogger = new TraceLogger(projectName);
         this.project = null;
         this.inputEnabled = false;
 

@@ -20,9 +20,11 @@ const StarLayer = (props) => {
             allStarLayerRef.current.listening(false)
         }
     }, [])
-    const [backdropImg] = useImage(axios.defaults.baseURL + backdropStar.prototypeId);
+    // const [backdropImg] = useImage(axios.defaults.baseURL + backdropStar.prototypeId);
+    const [backdropImg] = useImage( backdropStar.prototypeId);
     if (backdropImg !== undefined) {
         backdropImg.crossOrigin = "Anonymous";
+        // console.log("backdropImg: ", backdropImg);
     }
 
 
