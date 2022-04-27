@@ -35,10 +35,10 @@ function App() {
                                             panelHeight={"100vh"}
                                         >
                                             <EditStepper activeStep={activeStep} setActiveStep={setActiveStep}/>
-                                            <div>
-                                                <FrameListContainer/>
+                                            {/*<div>*/}
+                                                {/*<FrameListContainer/>*/}
                                                 <Snap activeStep={globalConfig.controlCond? 1:activeStep} />
-                                            </div>
+                                            {/*</div>*/}
                                         </ResizablePanels>
                                     </>
                                 }
