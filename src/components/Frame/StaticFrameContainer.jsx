@@ -22,13 +22,14 @@ const StaticFrameContainer = React.memo((props) => {
     const classes = useStyles();
     const {frameData, frameIndex, _id} = props;
 
+
     return (
         <Grid  item key={frameIndex}>
             <Card variant="outlined"
                   className={classes.paper}
             >
                 <StaticFrame
-                    key={frameData._id}
+                    key={_id}
                     frameData={frameData}
                 />
             </Card>

@@ -48,6 +48,7 @@ const FrameList = (props) => {
                                 {frameList.map((frameData, i) => (
                                     <div
                                         className={classes.paper}
+                                        key={frameData._id}
                                     >
                                     <StaticFrameContainer
                                         key={frameData._id}
